@@ -116,7 +116,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
       <div className="results__actions">
         <Link
           href="/assistant"
-          className="btn btn--primary inline-flex items-center gap-2"
+          className="btn btn--primary inline-flex items-center justify-center gap-2"
           aria-label="Launch Medical Assistant"
         >
           <span aria-hidden>👨‍⚕️</span> Launch Medical Assistant
