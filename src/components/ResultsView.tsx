@@ -4,6 +4,8 @@ import type React from "react"
 import { useState } from "react"
 import Link from "next/link"
 import ClaimsTable from "./ClaimsTable"
+import DiagnosisBarChart from "./DiagnosisBarChart"
+
 
 
 export type ICD10Entry = {
@@ -81,6 +83,22 @@ export type AnalysisResult = {
 type Props = {
   result: AnalysisResult
   onRunAgain: () => void
+}
+
+function formatDetails(text: string): string {
+  return text
+    // Bold: **something** → <b>something</b>
+    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+    // Bullets: lines starting with "-" → <ul><li>…</li></ul>
+    .replace(/(?:^|\n)- (.*?)(?=\n|$)/g, "<li>$1</li>")
+    // Numbered list: "1. " → <li>…</li>
+    .replace(/(?:^|\n)\d+\. (.*?)(?=\n|$)/g, "<li>$1</li>")
+    // Headings like "🔮 Title" → wrap in <h3>
+    .replace(/(?:^|\n)🔮 (.*?)(?=\n|$)/g, "<h3>🔮 $1</h3>")
+    // Double line breaks → paragraph
+    .replace(/\n\s*\n/g, "</p><p>")
+    // Single line breaks → <br>
+    .replace(/\n/g, "<br>");
 }
 
 const Row: React.FC<{
@@ -351,12 +369,68 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                   {/* New Row after table */}
                   {(outerTab === 0 && innerTab === 0) && (
                     <Row title="ICD-10 Code Frequency Analysis">
-                      {/* Graph or placeholder will go here later */}
+                      {(() => {
+                        // Define categories and data here
+                        const categories = [
+                          "C92.91", "F31.70", "F32.9", "F40.1", "F41.1",
+                          "F41.9", "J45.20", "J45.909", "K21.9", "K64.9",
+                          "M19.90", "M25.561", "M54.4", "R07.89", "Z17.0",
+                          "Z79.810", "Z90.13"
+                        ];
+                        const data = [1, 1, 2, 1, 1, 2, 1, 4, 1, 2, 2, 1, 1, 2, 2, 2, 2];
+
+                        return (
+                          <div>
+                            {/* Chart */}
+                            <DiagnosisBarChart categories={categories} data={data} />
+
+                            {/* Text Section Below Chart */}
+                            <div className="mt-6">
+                              <h3 className="text-lg font-semibold">Most Frequent Diagnosis Codes:</h3>
+                              <ul className="list-disc list-inside space-y-1">
+                                <li><strong>J45.909</strong> (4x): Unspecified asthma, uncomplicated</li>
+                                <li><strong>R07.89</strong> (2x): Other chest pain</li>
+                                <li><strong>Z17.0</strong> (2x): Estrogen receptor positive status</li>
+                                <li><strong>Z79.810</strong> (2x): Long term (current) use of selective estrogen receptor modulators</li>
+                                <li><strong>Z90.13</strong> (2x): Acquired absence of bilateral breasts and nipples</li>
+                              </ul>
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </Row>
                   )}
                   {(outerTab === 0 && innerTab === 1) && (
                     <Row title="Service Code Frequency Analysis">
-                      {/* Graph or placeholder will go here later */}
+                      {(() => {
+                        // Define categories and data here
+                        const categories = [
+                          "C92.91", "F31.70", "F32.9", "F40.1", "F41.1",
+                          "F41.9", "J45.20", "J45.909", "K21.9", "K64.9",
+                          "M19.90", "M25.561", "M54.4", "R07.89", "Z17.0",
+                          "Z79.810", "Z90.13"
+                        ];
+                        const data = [1, 1, 2, 1, 1, 2, 1, 4, 1, 2, 2, 1, 1, 2, 2, 2, 2];
+
+                        return (
+                          <div>
+                            {/* Chart */}
+                            <DiagnosisBarChart categories={categories} data={data} />
+
+                            {/* Text Section Below Chart */}
+                            <div className="mt-6">
+                              <h3 className="text-lg font-semibold">Most Frequent Diagnosis Codes:</h3>
+                              <ul className="list-disc list-inside space-y-1">
+                                <li><strong>J45.909</strong> (4x): Unspecified asthma, uncomplicated</li>
+                                <li><strong>R07.89</strong> (2x): Other chest pain</li>
+                                <li><strong>Z17.0</strong> (2x): Estrogen receptor positive status</li>
+                                <li><strong>Z79.810</strong> (2x): Long term (current) use of selective estrogen receptor modulators</li>
+                                <li><strong>Z90.13</strong> (2x): Acquired absence of bilateral breasts and nipples</li>
+                              </ul>
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </Row>
                   )}
                 </div>
@@ -508,7 +582,9 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                         fontSize: "0.95rem",
                         lineHeight: 1.5
                       }}
-                      dangerouslySetInnerHTML={{ __html: entry.details }}
+                      dangerouslySetInnerHTML={{
+                        __html: `<p>${formatDetails(entry.details)}</p>`.replace(/<p><\/p>/g, "")
+                      }}
                     />
                   )}
 
