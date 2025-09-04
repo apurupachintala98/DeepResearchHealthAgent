@@ -365,3 +365,55 @@ select:focus {
     grid-template-columns: 1fr;
   }
 }
+
+
+.cardio-risk-box {
+  border: 2px solid #e57373; /* red border */
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  max-width: 1500px;
+}
+
+.cardio-risk-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #d32f2f;
+}
+
+.cardio-risk-icon {
+  font-size: 1.2rem;
+}
+
+.ml-results {
+  margin-bottom: 1rem;
+}
+
+.ml-label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.risk-score {
+  font-size: 1.4rem;
+  color: #388e3c;
+}
+
+.risk-score__value {
+  font-weight: bold;
+  font-size: 1.6rem;
+}
+
+.risk-level {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+}
