@@ -91,7 +91,7 @@ export function ChatAssistant() {
   }
 
   return (
-    <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-6 p-4 md:grid-cols-[320px_1fr] md:p-6" style={{ gridTemplateColumns: "0fr 1fr" }}>
+    <div className="mx-auto min-h-dvh grid w-full max-w-7xl grid-cols-1 gap-6 p-4 md:grid-cols-[320px_1fr] md:p-6" style={{ gridTemplateColumns: "0fr 1fr" }}>
       {/* Sidebar */}
       <aside className="sticky top-4 hidden w-80 min-w-80 max-w-80 shrink-0 overflow-x-hidden self-start md:block">
         <Card className="rounded-3xl bg-white p-4 shadow-md ring-1 ring-slate-100">
@@ -163,7 +163,7 @@ export function ChatAssistant() {
 
         {/* Messages */}
         <Card className="mt-3 rounded-2xl border-none p-2 shadow-none">
-          <ScrollArea className="h-[48vh] md:h-[56vh]" viewportRef={viewportRef}>
+          <ScrollArea className="h-[60vh] md:h-[70vh]" viewportRef={viewportRef}>
             <div className="space-y-2 p-1" role="list" aria-label="Conversation">
               {messages.map((m) => (
                 <MessageItem key={m.id} role={m.role} text={m.text} id={""} />
