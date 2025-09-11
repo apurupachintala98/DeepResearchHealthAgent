@@ -45,7 +45,7 @@ export const App: React.FC = () => {
         last_name: values.lastName.trim(),
         ssn: values.ssn.trim(),
         date_of_birth: values.dob,
-        gender: values.gender === "Female" ? "F" : "M", // ✅ cast to "M" | "F"
+        gender: values.gender === "Female" ? "F" : "M", 
         zip_code: values.zip.trim(),
       };
       
@@ -149,7 +149,7 @@ export const App: React.FC = () => {
       </main>
 
       <section className="px-6 py-8">
-        {stage === "processing" && <ProgressView />}
+        {stage === "processing" && <ProgressView isComplete={!!result} />}
         {stage === "complete" && result && <ResultsView result={result} onRunAgain={handleRunAgain} />}
       </section>
     </div>
