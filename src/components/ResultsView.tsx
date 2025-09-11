@@ -85,21 +85,42 @@ type Props = {
   onRunAgain: () => void
 }
 
-function formatDetails(text: string): string {
+// function formatDetails(text: string): string {
+//   return text
+//     // Bold: **something** → <b>something</b>
+//     .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+//     // Bullets: lines starting with "-" → <ul><li>…</li></ul>
+//     .replace(/(?:^|\n)- (.*?)(?=\n|$)/g, "<li>$1</li>")
+//     // Numbered list: "1. " → <li>…</li>
+//     .replace(/(?:^|\n)\d+\. (.*?)(?=\n|$)/g, "<li>$1</li>")
+//     // Headings like "🔮 Title" → wrap in <h3>
+//     .replace(/(?:^|\n)🔮 (.*?)(?=\n|$)/g, "<h3>🔮 $1</h3>")
+//     // Double line breaks → paragraph
+//     .replace(/\n\s*\n/g, "</p><p>")
+//     // Single line breaks → <br>
+//     .replace(/\n/g, "<br>");
+// }
+
+function formatDetails(text: string) {
   return text
+    // Headings: # → styled div for h1, ## → styled div for h2, ### → styled div for h3
+    .replace(/(?:^|\n)### (.*?)(?=\n|$)/g, '<div class="heading3">$1</div>')
+    .replace(/(?:^|\n)## (.*?)(?=\n|$)/g, '<div class="heading2">$1</div>')
+    .replace(/(?:^|\n)# (.*?)(?=\n|$)/g, '<div class="heading1">$1</div>')
     // Bold: **something** → <b>something</b>
     .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
-    // Bullets: lines starting with "-" → <ul><li>…</li></ul>
+    // Bullets: lines starting with "-" → <li>…</li>
     .replace(/(?:^|\n)- (.*?)(?=\n|$)/g, "<li>$1</li>")
     // Numbered list: "1. " → <li>…</li>
     .replace(/(?:^|\n)\d+\. (.*?)(?=\n|$)/g, "<li>$1</li>")
-    // Headings like "🔮 Title" → wrap in <h3>
-    .replace(/(?:^|\n)🔮 (.*?)(?=\n|$)/g, "<h3>🔮 $1</h3>")
+    // Special headings like "🔮 Title" → styled div
+    .replace(/(?:^|\n)🔮 (.*?)(?=\n|$)/g, '<div class="heading3">🔮 $1</div>')
     // Double line breaks → paragraph
     .replace(/\n\s*\n/g, "</p><p>")
     // Single line breaks → <br>
     .replace(/\n/g, "<br>");
 }
+
 
 const Row: React.FC<{
   title: string
