@@ -53,17 +53,17 @@ export type MedicationEntry = {
 };
 
 
-export type HealthTrajectoryEntry = {
-  date: string;
-  summary: string;
-  details?: string;
-  metrics?: {
-    bloodPressure: string;
-    LDL: number;
-    weight: number;
-    activityLevel: string;
-  };
-};
+// export type HealthTrajectoryEntry = {
+//   date: string;
+//   summary: string;
+//   details?: string;
+//   metrics?: {
+//     bloodPressure: string;
+//     LDL: number;
+//     weight: number;
+//     activityLevel: string;
+//   };
+// };
 
 
 export type AnalysisResult = {
@@ -75,7 +75,7 @@ export type AnalysisResult = {
   ndcData: NDCEntry[]
   medicationData: MedicationEntry[]
   entities: { type: string; value: string }[]
-  healthTrajectory: HealthTrajectoryEntry[]
+  healthTrajectory: string
   // heartRisk: { score: number; factors: string[] }
   heartRisk: { score: number; level: string }
 }
@@ -543,80 +543,27 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
           </div>
         </Row>
 
-
         <Row title="Health Trajectory">
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "16px",
-              marginTop: "16px"
-            }}
-          >
-            {result.healthTrajectory?.map((entry, i) => {
-              return (
-                <div
-                  key={i}
-                  style={{
-                    background: "#f9f9f9",
-                    padding: "16px",
-                    borderRadius: "8px",
-                    boxShadow: "0 2px 6px rgba(0,0,0,0.1)"
-                  }}
-                >
-                  <div
-                    style={{
-                      fontWeight: "bold",
-                      fontSize: "1rem",
-                      marginBottom: "8px"
-                    }}
-                  >
-                    {entry.date} — {entry.summary}
-                  </div>
-
-                  {/* Render narrative details if present */}
-                  {entry.details && (
-                    <div
-                      style={{
-                        whiteSpace: "pre-wrap",
-                        fontSize: "0.95rem",
-                        lineHeight: 1.5
-                      }}
-                      dangerouslySetInnerHTML={{
-                        __html: `<p>${formatDetails(entry.details)}</p>`.replace(/<p><\/p>/g, "")
-                      }}
-                    />
-                  )}
-
-                  {/* Render metrics if present */}
-                  {entry.metrics && (
-                    <ul style={{ paddingLeft: "20px", margin: 0 }}>
-                      <li>
-                        <strong>Blood Pressure:</strong> {entry.metrics.bloodPressure}
-                      </li>
-                      <li>
-                        <strong>LDL:</strong> {entry.metrics.LDL} mg/dL
-                      </li>
-                      <li>
-                        <strong>Weight:</strong> {entry.metrics.weight} kg
-                      </li>
-                      <li>
-                        <strong>Activity Level:</strong> {entry.metrics.activityLevel}
-                      </li>
-                    </ul>
-                  )}
-
-                  {/* Fallback if neither details nor metrics exist */}
-                  {!entry.details && !entry.metrics && (
-                    <div style={{ fontStyle: "italic", color: "#666" }}>
-                      No additional data available
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "16px" }}>
+              <div
+                style={{
+                  background: "#f9f9f9",
+                  padding: "16px",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                  whiteSpace: "pre-wrap",
+                  fontSize: "0.95rem",
+                  lineHeight: 1.5
+                }}
+              >
+                  <div dangerouslySetInnerHTML={{
+                    __html: `<p>${formatDetails(result.healthTrajectory)}</p>`.replace(/<p><\/p>/g, "")
+                  }} />
+           
+              </div>
           </div>
         </Row>
+
 
         <Row title="Heart Attack Risk Prediction">
           <div className="cardio-risk-box">
