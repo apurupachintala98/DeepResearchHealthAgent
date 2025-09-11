@@ -5,13 +5,13 @@ import { Card } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 
 const progressSteps = [
-  { label: "API Fetch", duration: 900 },
   { label: "Deidentification", duration: 900 },
   { label: "Field Extraction", duration: 900 },
   { label: "Entity Extraction", duration: 900 },
   { label: "Health Trajectory", duration: 900 },
   { label: "Heart Risk Prediction", duration: 900 },
   { label: "Chatbot Initialization", duration: 900 },
+    { label: "API Fetch", duration: 900 },
 ]
 
 interface ProgressViewProps {
@@ -42,15 +42,22 @@ export function ProgressView({ isProcessing, onComplete }: ProgressViewProps) {
     let progress = 0
     interval = setInterval(() => {
       progress += 1
-      if (progress >= 95) progress = 95
+      if (progress >= 98) progress = 98
       setOverallProgress(progress)
     }, 50)
 
     // Cycle through steps every 1.5 seconds
-    stepInterval = setInterval(() => {
-      setCurrentStep((prev) => (prev + 1) % progressSteps.length)
+     stepInterval = setInterval(() => {
+      setCurrentStep((prev) => {
+        if (prev < progressSteps.length - 1) {
+          return prev + 1
+        } else {
+          // Stay on the last step ("API Fetch")
+          return prev
+        }
+      })
     }, 1500)
-
+    
     return () => {
       clearInterval(interval)
       clearInterval(stepInterval)
