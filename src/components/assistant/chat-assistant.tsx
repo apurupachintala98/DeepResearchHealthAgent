@@ -91,7 +91,7 @@ export function ChatAssistant() {
   }
 
   return (
-    <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-6 p-4 md:grid-cols-[320px_1fr] md:p-6" style={{ gridTemplateColumns: "0fr 1fr" }}>
+    <div className="grid w-full grid-cols-1 gap-6 p-4 md:grid-cols-[320px_1fr] md:p-6" style={{ gridTemplateColumns: "0fr 1fr" }}>
       {/* Sidebar */}
       <aside className="sticky top-4 hidden w-80 min-w-80 max-w-80 shrink-0 overflow-x-hidden self-start md:block">
         <Card className="rounded-3xl bg-white p-4 shadow-md ring-1 ring-slate-100">
