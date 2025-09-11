@@ -103,12 +103,12 @@ const Row: React.FC<{
 export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
   return (
     <section className="results">
-      <header className="results__header">
+      {/* <header className="results__header">
         <div className="results__icon" aria-hidden>
           🧬
         </div>
         <h2 className="title">Deep Research Health Agent</h2>
-      </header>
+      </header> */}
 
       <div className="results__actions flex justify-between items-center">
         <Link
@@ -117,7 +117,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
           aria-label="Launch Medical Assistant"
         >
           <span aria-hidden>
-            <img src="/chat-logo.png" alt="Medical Assistant Logo" className="w-5 h-5" />
+            <img src="/images/chat-logo.png" alt="Medical Assistant Logo" className="w-5 h-5" />
           </span>
           Launch Medical Assistant
         </Link>
