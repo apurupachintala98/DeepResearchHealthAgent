@@ -92,7 +92,7 @@ export const ProgressView: React.FC = () => {
 
         {stepIndex === steps.length && (
           <div className="rows fade-in">
-            <p className="pt-4 font-bold">All steps completed. Displaying final data...</p>
+            <p className="pt-4 font-bold">All steps are completed. Displaying final data...</p>
           </div>
         )}
       </div>
