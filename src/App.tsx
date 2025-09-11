@@ -20,7 +20,8 @@ export const App: React.FC = () => {
     zip: "",
     ssn: "",
   });
-
+const [isProcessing, setIsProcessing] = useState(false);
+  const [showResults, setShowResults] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     if (stage === "processing" && sectionRef.current) {
@@ -31,6 +32,7 @@ export const App: React.FC = () => {
   async function handleSubmit(values: PatientFormValues) {
     setPatient(values);
     setStage("processing");
+    setIsProcessing(true);
 
     try {
       const payload: {
@@ -115,15 +117,25 @@ export const App: React.FC = () => {
       };
 
       setResult(transformedResult);
+      setIsProcessing(false);
       setStage("complete");
     } catch (e) {
       console.error("Analysis failed:", e);
+      setIsProcessing(false);
       setStage("form");
     }
   }
 
-  function handleRunAgain() {
+  function handleComplete() {
+    setStage("complete");
+    setShowResults(true);
+  }
+
+   function handleRunAgain() {
     setStage("form");
+    setResult(null);
+    setIsProcessing(false);
+    setShowResults(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -149,7 +161,7 @@ export const App: React.FC = () => {
       </main>
 
       <section className="px-6 py-8">
-        {stage === "processing" && <ProgressView isComplete={!!result} />}
+        {stage === "processing" && <ProgressView isProcessing={isProcessing} onComplete={handleComplete} />}
         {stage === "complete" && result && <ResultsView result={result} onRunAgain={handleRunAgain} />}
       </section>
     </div>

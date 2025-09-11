@@ -15,81 +15,54 @@ const progressSteps = [
 ]
 
 interface ProgressViewProps {
-  isComplete: boolean;
+  isProcessing: boolean;
+  onComplete: () => void;
 }
 
-export function ProgressView({ isComplete }: ProgressViewProps) {
+export function ProgressView({ isProcessing, onComplete }: ProgressViewProps) {
 
   const [currentStep, setCurrentStep] = useState(0)
   const [overallProgress, setOverallProgress] = useState(0)
   const [isCompleted, setIsCompleted] = useState(false)
 
-  useEffect(() => {
-    let stepTimeout: NodeJS.Timeout
-    let progressInterval: NodeJS.Timeout
+ useEffect(() => {
+    let interval: NodeJS.Timeout | undefined
+    let stepInterval: NodeJS.Timeout | undefined
 
-    if (isComplete) {
-      // Finalize progress when API response arrives
+    if (!isProcessing) {
       setOverallProgress(100)
-      setIsCompleted(true)
-      return () => {
-        clearTimeout(stepTimeout)
-        clearInterval(progressInterval)
-      }
+      clearInterval(interval)
+      clearInterval(stepInterval)
+      const timer = setTimeout(() => {
+        onComplete()
+      }, 300)
+      return () => clearTimeout(timer)
     }
 
-    const runStep = (stepIndex: number) => {
-      if (stepIndex >= progressSteps.length) {
-        setIsCompleted(true)
-        setOverallProgress(100)
-        return
-      }
+    let progress = 0
+    interval = setInterval(() => {
+      progress += 1
+      if (progress >= 95) progress = 95
+      setOverallProgress(progress)
+    }, 50)
 
-      const step = progressSteps[stepIndex]
-      setCurrentStep(stepIndex)
-
-      const baseProgress = (stepIndex / progressSteps.length) * 100
-      const stepProgress = (1 / progressSteps.length) * 100
-
-      // Animate progress for current step
-      let currentStepProgress = 0
-      progressInterval = setInterval(() => {
-        currentStepProgress += 2
-        const stepCompletion = Math.min(currentStepProgress, 100)
-
-        const totalProgress = baseProgress + (stepCompletion / 100) * stepProgress
-        setOverallProgress(Math.min(totalProgress, 100))
-
-        if (currentStepProgress >= 100) {
-          clearInterval(progressInterval)
-        }
-      }, step.duration / 50)
-
-      // Move to next step
-      stepTimeout = setTimeout(() => {
-        clearInterval(progressInterval)
-        runStep(stepIndex + 1)
-      }, step.duration)
-    }
-
-    runStep(0)
+    // Cycle through steps every 1.5 seconds
+    stepInterval = setInterval(() => {
+      setCurrentStep((prev) => (prev + 1) % progressSteps.length)
+    }, 1500)
 
     return () => {
-      clearTimeout(stepTimeout)
-      clearInterval(progressInterval)
+      clearInterval(interval)
+      clearInterval(stepInterval)
     }
-  }, [isComplete])
+  }, [isProcessing, onComplete])
 
   return (
     <Card className="p-6 bg-muted/30 border-border">
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <span className="text-sm font-medium text-foreground">
-            {isCompleted
-              ? "Analysis Complete"
-              : currentStep < progressSteps.length
-                ? progressSteps[currentStep].label
-                : "Finalizing..."}
+            {progressSteps[currentStep].label}
           </span>
           <div className="flex items-center space-x-2">
             <div className={`w-2 h-2 rounded-full ${isCompleted ? "bg-green-500" : "bg-primary animate-pulse"}`} />
@@ -100,11 +73,8 @@ export function ProgressView({ isComplete }: ProgressViewProps) {
         <Progress value={overallProgress} className="h-2" />
 
         <div className="flex justify-between text-xs text-muted-foreground">
-          <span>
-            Step {isCompleted ? progressSteps.length : Math.min(currentStep + 1, progressSteps.length)} of{" "}
-            {progressSteps.length}
-          </span>
-          <span>{isCompleted ? "Ready!" : "Please wait..."}</span>
+          <span>{isProcessing ? "Please wait..." : "Almost done!"}</span>
+          <span>{isProcessing ? "" : "Ready!"}</span>
         </div>
       </div>
     </Card>
