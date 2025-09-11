@@ -368,12 +368,12 @@ select:focus {
 
 
 .cardio-risk-box {
-  border: 2px solid #e57373; /* red border */
+  border: 2px solid #e57373; 
   border-radius: 8px;
   padding: 1rem;
   background-color: #fff;
   font-family: 'Segoe UI', sans-serif;
-  max-width: 1500px;
+  max-width: 1900px;
 }
 
 .cardio-risk-header {

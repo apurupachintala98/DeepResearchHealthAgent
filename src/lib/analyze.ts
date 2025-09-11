@@ -4,6 +4,7 @@ export type PatientInfo = {
   dob: string // yyyy-mm-dd
   gender: "Male" | "Female" | "Other"
   zip: string
+  ssn: string
 }
 
 export type ProgressSnapshot = {

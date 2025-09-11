@@ -1,3 +1,4 @@
+"use client"
 import axios from 'axios';
 
 const agentApi = axios.create({
