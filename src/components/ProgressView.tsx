@@ -24,7 +24,7 @@ export const ProgressView: React.FC = () => {
       setProgress(100)
       return
     }
-    
+
     const interval = setInterval(() => {
       setProgress((prev) => {
         const target = stepThresholds[stepIndex]
@@ -53,7 +53,7 @@ export const ProgressView: React.FC = () => {
 
         <div className="kpis">
           <div className="kpi">
-            <div className="kpi__label">Okai Steps</div>
+            <div className="kpi__label">Total Steps</div>
             <div className="kpi__value">{steps.length}</div>
           </div>
           <div className="kpi">
