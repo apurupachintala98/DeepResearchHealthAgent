@@ -218,7 +218,7 @@ export const PatientForm: React.FC<Props> = ({ initialValues, onSubmit }) => {
           </div>
 
           {/* Zip Code */}
-          <div className="field field--full">
+          <div className="field">
             <label htmlFor="zip">Zip Code</label>
             <input
               id="zip"
