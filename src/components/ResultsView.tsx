@@ -6,8 +6,6 @@ import Link from "next/link"
 import ClaimsTable from "./ClaimsTable"
 import DiagnosisBarChart from "./DiagnosisBarChart"
 
-
-
 export type ICD10Entry = {
   code: string;
   meaning: string;
@@ -52,20 +50,6 @@ export type MedicationEntry = {
   path: string;
 };
 
-
-// export type HealthTrajectoryEntry = {
-//   date: string;
-//   summary: string;
-//   details?: string;
-//   metrics?: {
-//     bloodPressure: string;
-//     LDL: number;
-//     weight: number;
-//     activityLevel: string;
-//   };
-// };
-
-
 export type AnalysisResult = {
   claimsData: string[]
   claimsAnalysis: string[]
@@ -76,7 +60,6 @@ export type AnalysisResult = {
   medicationData: MedicationEntry[]
   entities: { type: string; value: string }[]
   healthTrajectory: string
-  // heartRisk: { score: number; factors: string[] }
   heartRisk: { score: number; level: string }
 }
 
@@ -97,7 +80,6 @@ function formatDetails(text: string) {
     .replace(/\n\s*\n/g, "</p><p>")
     .replace(/\n/g, "<br>");
 }
-
 
 const Row: React.FC<{
   title: string
@@ -128,22 +110,26 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
         <h2 className="title">Deep Research Health Agent</h2>
       </header>
 
-
-      <div className="results__actions">
+      <div className="results__actions flex justify-between items-center">
         <Link
           href="/assistant"
-          className="btn btn--primary inline-flex items-center justify-center gap-2"
+          className="btn btn--primary inline-flex items-center justify-center gap-2 w-auto"
           aria-label="Launch Medical Assistant"
         >
-          <span aria-hidden>👨‍⚕️</span> Launch Medical Assistant
+          <span aria-hidden>
+            <img src="/chat-logo.png" alt="Medical Assistant Logo" className="w-5 h-5" />
+          </span>
+          Launch Medical Assistant
         </Link>
-        <div className="banner banner--success">
+
+        <div className="banner banner--success inline-flex items-center gap-2">
           <span className="banner__icon" aria-hidden>
             ✅
           </span>
           <span>Deep Research Complete!</span>
         </div>
       </div>
+
 
       <div className="result-list">
 
@@ -543,22 +529,22 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
 
         <Row title="Health Trajectory">
           <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "16px" }}>
-              <div
-                style={{
-                  background: "#f9f9f9",
-                  padding: "16px",
-                  borderRadius: "8px",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                  whiteSpace: "pre-wrap",
-                  fontSize: "0.95rem",
-                  lineHeight: 1.5
-                }}
-              >
-                  <div dangerouslySetInnerHTML={{
-                    __html: `<p>${formatDetails(result.healthTrajectory)}</p>`.replace(/<p><\/p>/g, "")
-                  }} />
-           
-              </div>
+            <div
+              style={{
+                background: "#f9f9f9",
+                padding: "16px",
+                borderRadius: "8px",
+                boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                whiteSpace: "pre-wrap",
+                fontSize: "0.95rem",
+                lineHeight: 1.5
+              }}
+            >
+              <div dangerouslySetInnerHTML={{
+                __html: `<p>${formatDetails(result.healthTrajectory)}</p>`.replace(/<p><\/p>/g, "")
+              }} />
+
+            </div>
           </div>
         </Row>
 
