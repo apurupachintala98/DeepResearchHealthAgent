@@ -438,15 +438,15 @@ select:focus {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 60px;
-  height: 60px;
+  width: 90px;
+  height: 90px;
   background: #2563eb; /* blue background */
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  transition: #2563eb 0.3s ease, transform 0.2s ease;
+  transition: #afb6c7 0.3s ease, transform 0.2s ease;
   z-index: 1000;
 }
 
@@ -456,6 +456,6 @@ select:focus {
 }
 
 .floating-assistant-btn img {
-  width: 30px;
-  height: 30px;
+  width: 70px;
+  height: 70px;
 }
