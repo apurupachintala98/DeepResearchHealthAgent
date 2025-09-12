@@ -184,27 +184,27 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
                         key={metric.id}
                         className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 shadow-sm bg-card/50 backdrop-blur-sm min-w-0"
                     >
-                       <CardHeader className="pb-2 px-3 pt-3">
+               <CardHeader className="pb-2 px-3 pt-3">
   <div className="flex justify-between items-start">
-    {/* Left side: icon and title */}
+    {/* Left side: icon and title stacked vertically */}
     <div>
-      <div className="flex items-center gap-2">
-        <div className="p-1.5 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-          {metric.icon}
-        </div>
-        {/* Verified icon */}
-        {getStatusIcon(metric.status) && (
-          <div className={`p-1 rounded-full ${getStatusColor(metric.status)}`}>
-            {getStatusIcon(metric.status)}
-          </div>
-        )}
+      <div className="p-1.5 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+        {metric.icon}
       </div>
-      <CardTitle className="text-xs font-medium text-muted-foreground mt-1">
+      <CardTitle className="text-xs font-medium text-muted-foreground mt-2">
         {metric.label}
       </CardTitle>
     </div>
+
+    {/* Verified icon aligned to top-right */}
+    {getStatusIcon(metric.status) && (
+      <div className={`p-1 rounded-full ${getStatusColor(metric.status)} mt-1`}>
+        {getStatusIcon(metric.status)}
+      </div>
+    )}
   </div>
 </CardHeader>
+
 
 
 
