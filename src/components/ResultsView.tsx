@@ -5,6 +5,8 @@ import { useState } from "react"
 import Link from "next/link"
 import ClaimsTable from "./ClaimsTable"
 import DiagnosisBarChart from "./DiagnosisBarChart"
+import { HealthAnalyticsDashboard } from "./health-analytics-dashboard"
+import { CardiovascularRiskCard } from "./cardiovascular-risk-card"
 
 export type ICD10Entry = {
   code: string;
@@ -103,25 +105,7 @@ const Row: React.FC<{
 export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
   return (
     <section className="results">
-      {/* <header className="results__header">
-        <div className="results__icon" aria-hidden>
-          🧬
-        </div>
-        <h2 className="title">Deep Research Health Agent</h2>
-      </header> */}
-
       <div className="results__actions flex justify-between items-center">
-        {/* <Link
-          href="/assistant"
-          className="btn btn--primary inline-flex items-center justify-center gap-2 w-auto"
-          aria-label="Launch Medical Assistant"
-        >
-          <span aria-hidden>
-            <img src="/images/chat-logo.png" alt="Medical Assistant Logo" className="w-5 h-5" />
-          </span>
-          Launch Medical Assistant
-        </Link> */}
-
         <div className="banner banner--success inline-flex items-center gap-2">
           <span className="banner__icon" aria-hidden>
             ✅
@@ -132,7 +116,6 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
 
 
       <div className="result-list">
-
         <Row title="Claims Data">
           {(() => {
             const [selectedTab, setSelectedTab] = useState(0)
@@ -425,105 +408,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
 
         <Row title="Entity Extraction">
           <div style={{ marginTop: "16px" }}>
-            <h3 style={{ fontSize: "1rem", marginBottom: "12px" }}>
-              Enhanced Entity Extraction & Health Analytics
-            </h3>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "16px" }}>
-              {[
-                {
-                  type: "Diabetes Status",
-                  label: "Diabetes",
-                  icon: "💉",
-                  bg: "#fdecea",
-                  color: "#d81b60"
-                },
-                {
-                  type: "Age Group",
-                  label: "Age Group",
-                  icon: "👵",
-                  bg: "#f3e5f5",
-                  color: "#6d4c41"
-                },
-                {
-                  type: "Smoking Status",
-                  label: "Smoking",
-                  icon: "🚬",
-                  bg: "#eceff1",
-                  color: "#607d8b"
-                },
-                {
-                  type: "Alcohol Use",
-                  label: "Alcohol",
-                  icon: "🍷",
-                  bg: "#ede7f6",
-                  color: "#673ab7"
-                },
-                {
-                  type: "Blood Pressure",
-                  label: "Blood Pressure",
-                  icon: "❤️",
-                  bg: "#ffebee",
-                  color: "#e53935"
-                }
-              ].map((item, i) => {
-                const value =
-                  result.entities?.find(
-                    e => e.type.toLowerCase().trim() === item.type.toLowerCase().trim()
-                  )?.value || "Unknown";
-
-                return (
-                  <div
-                    key={i}
-                    style={{
-                      flex: "1 1 180px",
-                      minWidth: "180px",
-                      minHeight: "150px",
-                      padding: "16px",
-                      borderRadius: "12px",
-                      background: item.bg,
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                      textAlign: "center",
-                      gap: "8px",
-                      transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                      cursor: "pointer"
-                    }}
-                    onMouseEnter={e => {
-                      e.currentTarget.style.transform = "translateY(-4px)";
-                      e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.2)";
-                    }}
-                    onMouseLeave={e => {
-                      e.currentTarget.style.transform = "translateY(0)";
-                      e.currentTarget.style.boxShadow = "0 2px 6px rgba(0,0,0,0.1)";
-                    }}
-                  >
-                    <div style={{ fontSize: "2rem" }}>{item.icon}</div>
-                    <div
-                      style={{
-                        fontSize: "1rem",
-                        fontWeight: "bold",
-                        color: item.color
-                      }}
-                    >
-                      {item.label}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "1.1rem",
-                        fontWeight: "bold",
-                        textTransform: "uppercase",
-                        color: "#374151"
-                      }}
-                    >
-                      {value}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+           <HealthAnalyticsDashboard result={result} />
           </div>
         </Row>
 
@@ -550,7 +435,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
 
 
         <Row title="Heart Attack Risk Prediction">
-          <div className="cardio-risk-box">
+          {/* <div className="cardio-risk-box">
             <div className="cardio-risk-header">
               <span>Cardiovascular Risk Assessment</span>
               <span className="cardio-risk-icon">❤️</span>
@@ -564,7 +449,8 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
             </div>
 
             <div className="risk-level">Low Risk</div>
-          </div>
+          </div> */}
+          <CardiovascularRiskCard result={result}/>
         </Row>
 
       </div>

@@ -20,7 +20,7 @@ export const App: React.FC = () => {
     zip: "",
     ssn: "",
   });
-const [isProcessing, setIsProcessing] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const sectionRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -47,10 +47,10 @@ const [isProcessing, setIsProcessing] = useState(false);
         last_name: values.lastName.trim(),
         ssn: values.ssn.trim(),
         date_of_birth: values.dob,
-        gender: values.gender === "Female" ? "F" : "M", 
+        gender: values.gender === "Female" ? "F" : "M",
         zip_code: values.zip.trim(),
       };
-      
+
 
       const apiResponse = await AgentService.runAnalysisSync(payload);
 
@@ -131,7 +131,7 @@ const [isProcessing, setIsProcessing] = useState(false);
     setShowResults(true);
   }
 
-   function handleRunAgain() {
+  function handleRunAgain() {
     setStage("form");
     setResult(null);
     setIsProcessing(false);
@@ -148,12 +148,18 @@ const [isProcessing, setIsProcessing] = useState(false);
           height: stage === "form" ? "100vh" : "78vh",
         }}
       >
+
         <h1
-          className="text-4xl md:text-3xl font-bold text-slate-900 text-center drop-shadow-md pt-6"
-          style={{ color: "#6a96fe", fontSize: "38px" }}
+          className="text-4xl md:text-3xl font-bold text-slate-900 text-center pt-6"
+          style={{
+            color: "#6a96fe",
+            fontSize: "38px",
+            textShadow: "3px 3px 6px rgba(0, 0, 0, 0.3), 0 0 12px rgba(106, 150, 254, 0.4)"
+          }}
         >
           Deep Research Health Agent 3.0
         </h1>
+
 
         <div className="flex justify-end items-center h-full px-10">
           <PatientForm onSubmit={handleSubmit} initialValues={patient} />
