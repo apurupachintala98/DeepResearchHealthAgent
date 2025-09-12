@@ -171,27 +171,14 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
                                 <Shield className="h-4 w-4 text-chart-1" />
                                 <span className="text-sm font-medium">HIPAA Compliant</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <Activity className="h-4 w-4 text-chart-1" />
-                                <span className="text-sm font-medium">AI-Powered Insights</span>
-                            </div>
                         </div>
                     </div>
 
                 </div>
-
-                <div className="absolute top-0 right-0 w-64 h-32 opacity-20">
-                    <Image
-                        src="/images/health-analytics-hero.jpg"
-                        alt="Health Analytics"
-                        fill
-                        className="object-cover rounded-lg"
-                    />
-                </div>
             </div>
 
             {/* Metrics Grid */}
-            <div className="grid grid-cols-5 gap-4 min-w-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 w-full overflow-x-auto">
                 {healthMetrics.map((metric) => (
                     <Card
                         key={metric.id}
