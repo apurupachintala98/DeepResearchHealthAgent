@@ -433,3 +433,29 @@ select:focus {
   font-size: 1.2em;
   font-weight: bold;
 }
+
+.floating-assistant-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: #2563eb; /* blue background */
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  transition: #2563eb 0.3s ease, transform 0.2s ease;
+  z-index: 1000;
+}
+
+.floating-assistant-btn:hover {
+  background: #1e40af; /* darker blue on hover */
+  transform: translateY(-3px);
+}
+
+.floating-assistant-btn img {
+  width: 30px;
+  height: 30px;
+}

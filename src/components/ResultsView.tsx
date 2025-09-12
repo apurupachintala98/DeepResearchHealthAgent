@@ -111,7 +111,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
       </header> */}
 
       <div className="results__actions flex justify-between items-center">
-        <Link
+        {/* <Link
           href="/assistant"
           className="btn btn--primary inline-flex items-center justify-center gap-2 w-auto"
           aria-label="Launch Medical Assistant"
@@ -120,7 +120,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
             <img src="/images/chat-logo.png" alt="Medical Assistant Logo" className="w-5 h-5" />
           </span>
           Launch Medical Assistant
-        </Link>
+        </Link> */}
 
         <div className="banner banner--success inline-flex items-center gap-2">
           <span className="banner__icon" aria-hidden>
@@ -568,6 +568,15 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
         </Row>
 
       </div>
+
+      {/* Floating Medical Assistant Button */}
+      <Link
+        href="/assistant"
+        className="floating-assistant-btn"
+        aria-label="Launch Medical Assistant"
+      >
+        <img src="/images/chat-logo.png" alt="Medical Assistant Logo" className="w-6 h-6" />
+      </Link>
     </section>
   )
 }
