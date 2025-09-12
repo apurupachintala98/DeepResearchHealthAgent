@@ -161,7 +161,7 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
                         </div>
                     </div>
 
-                    <div className="w-full max-w-6xl mx-auto p-4">
+                    <div className="w-full p-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                             <div className="flex items-center gap-2">
                                 <TrendingUp className="h-4 w-4 text-chart-1" />
@@ -185,9 +185,12 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
                         className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 shadow-sm bg-card/50 backdrop-blur-sm min-w-0"
                     >
                         <CardHeader className="pb-2 px-3 pt-3">
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-3">
                                 <div className="p-1.5 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                                     {metric.icon}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <CardTitle className="text-xs font-medium text-muted-foreground truncate">{metric.label}</CardTitle>
                                 </div>
                                 {getStatusIcon(metric.status) && (
                                     <div className={`p-1 rounded-full ${getStatusColor(metric.status)}`}>
@@ -195,8 +198,8 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
                                     </div>
                                 )}
                             </div>
-                            <CardTitle className="text-xs font-medium text-muted-foreground truncate">{metric.label}</CardTitle>
                         </CardHeader>
+
 
                         <CardContent className="pt-0 px-3 pb-3">
                             <div className="space-y-2">
