@@ -8,6 +8,7 @@ import { Heart, TrendingDown, Shield, Info } from "lucide-react"
 import { useState } from "react"
 import { AnalysisResult } from "./ResultsView"
 
+
 interface RiskData {
     percentage: number
     level: "Low" | "Moderate" | "High"
@@ -17,6 +18,8 @@ interface RiskData {
 interface CardiovascularRiskCardProps {
     result: AnalysisResult
 }
+
+
 
 export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) {
     const [showDetails, setShowDetails] = useState(false)
