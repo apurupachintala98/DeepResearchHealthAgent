@@ -143,6 +143,85 @@ export const HealthAnalyticsDashboard: React.FC<HealthAnalyticsDashboardProps> =
   const riskAssessment = getRiskLevel()
 
   return (
+    // <div className="space-y-8">
+    //   {/* Header Section */}
+    //   <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/5 via-accent/5 to-primary/10 p-8">
+    //     <div className="relative z-10">
+    //       <div className="flex items-center gap-3 mb-4">
+    //         <div className="p-2 rounded-lg bg-primary/10">
+    //           <Activity className="h-6 w-6 text-primary" />
+    //         </div>
+    //         <div>
+    //           <h1 className="text-3xl font-bold text-balance">Entity Extraction</h1>
+    //           <p className="text-muted-foreground text-lg">Enhanced Entity Extraction & Health Analytics</p>
+    //         </div>
+    //       </div>
+
+    //       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+    //         <div className="flex items-center gap-2">
+    //           <TrendingUp className="h-4 w-4 text-chart-1" />
+    //           <span className="text-sm font-medium">Real-time Analysis</span>
+    //         </div>
+    //         <div className="flex items-center gap-2">
+    //           <Shield className="h-4 w-4 text-chart-1" />
+    //           <span className="text-sm font-medium">HIPAA Compliant</span>
+    //         </div>
+    //         <div className="flex items-center gap-2">
+    //           <Activity className="h-4 w-4 text-chart-1" />
+    //           <span className="text-sm font-medium">AI-Powered Insights</span>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+
+    //   {/* Metrics Grid */}
+    //   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+    //     {healthMetrics.map((metric) => (
+    //       <Card
+    //         key={metric.id}
+    //         className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 shadow-sm bg-card/50 backdrop-blur-sm"
+    //       >
+    //         <CardHeader className="pb-3">
+    //           <div className="flex items-center justify-between">
+    //             <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+    //               {metric.icon}
+    //             </div>
+    //             {getStatusIcon(metric.status) && (
+    //               <div className={`p-1 rounded-full ${getStatusColor(metric.status)}`}>
+    //                 {getStatusIcon(metric.status)}
+    //               </div>
+    //             )}
+    //           </div>
+    //           <CardTitle className="text-sm font-medium text-muted-foreground">{metric.label}</CardTitle>
+    //         </CardHeader>
+
+    //         <CardContent className="pt-0">
+    //           <div className="space-y-3">
+    //             <div className="flex items-center justify-between">
+    //               <span className="text-2xl font-bold">{metric.value}</span>
+    //               {metric.trend !== undefined && (
+    //                 <Badge
+    //                   variant="outline"
+    //                   className={`text-xs ${
+    //                     metric.trend > 0 ? "text-chart-1" : metric.trend < 0 ? "text-chart-3" : "text-muted-foreground"
+    //                   }`}
+    //                 >
+    //                   {metric.trend > 0 ? "+" : ""}
+    //                   {metric.trend}%
+    //                 </Badge>
+    //               )}
+    //             </div>
+
+    //             <p className="text-xs text-muted-foreground leading-relaxed">{metric.description}</p>
+
+    //             {metric.status === "warning" && <Progress value={75} className="h-1" />}
+    //           </div>
+    //         </CardContent>
+    //       </Card>
+    //     ))}
+    //   </div>
+    // </div>
+
     <div className="space-y-8">
       {/* Header Section */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary/5 via-accent/5 to-primary/10 p-8">

@@ -1,121 +1,4 @@
-// "use client"
-
-// import { Card, CardContent, CardHeader } from "@/components/ui/card"
-// import { Button } from "@/components/ui/button"
-// import { Badge } from "@/components/ui/badge"
-// import { Progress } from "@/components/ui/progress"
-// import { Heart, TrendingDown, Shield, Info } from "lucide-react"
-// import { useState } from "react"
-
-// interface RiskData {
-//   percentage: number
-//   level: "Low" | "Moderate" | "High"
-//   recommendations: string[]
-// }
-
-// export function CardiovascularRiskCard() {
-//   const [showDetails, setShowDetails] = useState(false)
-
-//   const riskData: RiskData = {
-//     percentage: 45,
-//     level: "Low",
-//     recommendations: [
-//       "Maintain regular exercise routine",
-//       "Continue heart-healthy diet",
-//       "Monitor blood pressure monthly",
-//       "Schedule annual check-ups",
-//     ],
-//   }
-
-//   const getRiskColor = (level: string) => {
-//     switch (level) {
-//       case "Low":
-//         return "bg-primary text-primary-foreground"
-//       case "Moderate":
-//         return "bg-yellow-500 text-white"
-//       case "High":
-//         return "bg-destructive text-destructive-foreground"
-//       default:
-//         return "bg-muted text-muted-foreground"
-//     }
-//   }
-
-//   const getProgressColor = (level: string) => {
-//     switch (level) {
-//       case "Low":
-//         return "bg-primary"
-//       case "Moderate":
-//         return "bg-yellow-500"
-//       case "High":
-//         return "bg-destructive"
-//       default:
-//         return "bg-muted"
-//     }
-//   }
-
-//   return (
-//     <div className="w-full max-w-2xl mx-auto p-6 bg-gradient-to-br from-background to-muted/30">
-//       <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
-//         <CardHeader className="pb-4">
-//           <div className="flex items-center justify-between">
-//             <div className="flex items-center gap-3">
-//               <div className="p-3 rounded-full bg-primary/10">
-//                 <Heart className="h-6 w-6 text-primary" />
-//               </div>
-//               <div>
-//                 <h2 className="text-2xl font-bold text-card-foreground">Heart Attack Risk Prediction</h2>
-//                 <p className="text-muted-foreground">AI-Powered Cardiovascular Assessment</p>
-//               </div>
-//             </div>
-//             <Badge variant="secondary" className="px-3 py-1">
-//               <Shield className="h-4 w-4 mr-1" />
-//               ML Verified
-//             </Badge>
-//           </div>
-//         </CardHeader>
-
-//         <CardContent className="space-y-6">
-//           {/* Risk Score Display */}
-//           <div className="text-center space-y-4">
-//             <div className="relative">
-//               <div className="text-6xl font-bold text-primary mb-2">{riskData.percentage}%</div>
-//               <p className="text-lg text-muted-foreground">Heart Disease Risk Score</p>
-//             </div>
-
-//             {/* Risk Level Badge */}
-//             <div className="flex justify-center">
-//               <Badge className={`${getRiskColor(riskData.level)} px-4 py-2 text-lg font-semibold`}>
-//                 <TrendingDown className="h-4 w-4 mr-2" />
-//                 {riskData.level} Risk
-//               </Badge>
-//             </div>
-//           </div>
-
-//           {/* Progress Visualization */}
-//           <div className="space-y-3">
-//             <div className="flex justify-between text-sm text-muted-foreground">
-//               <span>Risk Assessment</span>
-//               <span>{riskData.percentage}% of 100%</span>
-//             </div>
-//             <div className="relative">
-//               <Progress value={riskData.percentage} className="h-3 bg-muted" />
-//               <div
-//                 className={`absolute top-0 left-0 h-3 rounded-full transition-all duration-1000 ${getProgressColor(riskData.level)}`}
-//                 style={{ width: `${riskData.percentage}%` }}
-//               />
-//             </div>
-//             <div className="flex justify-between text-xs text-muted-foreground">
-//               <span>Low Risk</span>
-//               <span>Moderate Risk</span>
-//               <span>High Risk</span>
-//             </div>
-//           </div>
-//         </CardContent>
-//       </Card>
-//     </div>
-//   )
-// }
-
+"use client"
 
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -123,92 +6,153 @@ import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Heart, TrendingDown, Shield, Info } from "lucide-react"
 import { useState } from "react"
-import { AnalysisResult } from "./ResultsView" // adjust the import path if needed
+import { AnalysisResult } from "./ResultsView"
 
 interface RiskData {
-  percentage: number
-  level: "Low" | "Moderate" | "High"
-  recommendations: string[]
+    percentage: number
+    level: "Low" | "Moderate" | "High"
+    recommendations: string[]
 }
 
 interface CardiovascularRiskCardProps {
-  result: AnalysisResult
+    result: AnalysisResult
 }
 
 export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) {
-  const [showDetails, setShowDetails] = useState(false)
+    const [showDetails, setShowDetails] = useState(false)
 
-  // Example logic: derive risk from result's entities
-  const computeRisk = (): RiskData => {
-    const entityMap = result.entities.reduce((map, entity) => {
-      map[entity.type.toLowerCase()] = entity.value
-      return map
-    }, {} as Record<string, string>)
+    const computeRisk = (): RiskData => {
+        const entityMap = result.entities.reduce((map, entity) => {
+            map[entity.type.toLowerCase()] = entity.value
+            return map
+        }, {} as Record<string, string>)
 
-    // Simple heuristic logic
-    const isDiabetic = entityMap["diabetics"] !== "no"
-    const hasHighBP = entityMap["blood pressure"] === "diagnosed"
-    const smokes = entityMap["smoking"] !== "no"
-    const drinks = entityMap["alcohol"] !== "no"
+        // Simple heuristic logic
+        const isDiabetic = entityMap["diabetics"] !== "no"
+        const hasHighBP = entityMap["blood pressure"] === "diagnosed"
+        const smokes = entityMap["smoking"] !== "no"
+        const drinks = entityMap["alcohol"] !== "no"
 
-    let riskCount = 0
-    if (isDiabetic) riskCount++
-    if (hasHighBP) riskCount++
-    if (smokes) riskCount++
-    if (drinks) riskCount++
+        let riskCount = 0
+        if (isDiabetic) riskCount++
+        if (hasHighBP) riskCount++
+        if (smokes) riskCount++
+        if (drinks) riskCount++
 
-    let percentage = Math.min(riskCount * 25 + 5, 100)
+        let percentage = Math.min(riskCount * 25 + 5, 100)
 
-    let level: "Low" | "Moderate" | "High"
-    if (riskCount <= 1) {
-      level = "Low"
-    } else if (riskCount <= 3) {
-      level = "Moderate"
-    } else {
-      level = "High"
+        let level: "Low" | "Moderate" | "High"
+        if (riskCount <= 1) {
+            level = "Low"
+        } else if (riskCount <= 3) {
+            level = "Moderate"
+        } else {
+            level = "High"
+        }
+
+        return {
+            percentage,
+            level,
+            recommendations: [
+                "Maintain regular exercise routine",
+                "Follow a heart-healthy diet",
+                "Monitor blood pressure monthly",
+                "Schedule annual check-ups",
+            ],
+        }
     }
 
-    return {
-      percentage,
-      level,
-      recommendations: [
-        "Maintain regular exercise routine",
-        "Follow a heart-healthy diet",
-        "Monitor blood pressure monthly",
-        "Schedule annual check-ups",
-      ],
+    const riskData = computeRisk()
+
+    const getRiskColor = (level: string) => {
+        switch (level) {
+            case "Low":
+                return "bg-primary text-primary-foreground"
+            case "Moderate":
+                return "bg-yellow-500 text-white"
+            case "High":
+                return "bg-destructive text-destructive-foreground"
+            default:
+                return "bg-muted text-muted-foreground"
+        }
     }
-  }
 
-  const riskData = computeRisk()
-
-  const getRiskColor = (level: string) => {
-    switch (level) {
-      case "Low":
-        return "bg-primary text-primary-foreground"
-      case "Moderate":
-        return "bg-yellow-500 text-white"
-      case "High":
-        return "bg-destructive text-destructive-foreground"
-      default:
-        return "bg-muted text-muted-foreground"
+    const getProgressColor = (level: string) => {
+        switch (level) {
+            case "Low":
+                return "bg-primary"
+            case "Moderate":
+                return "bg-yellow-500"
+            case "High":
+                return "bg-destructive"
+            default:
+                return "bg-muted"
+        }
     }
-  }
 
-  const getProgressColor = (level: string) => {
-    switch (level) {
-      case "Low":
-        return "bg-primary"
-      case "Moderate":
-        return "bg-yellow-500"
-      case "High":
-        return "bg-destructive"
-      default:
-        return "bg-muted"
-    }
-  }
+    // return (
+    //     <div className="w-full max-w-2xl mx-auto p-6 bg-gradient-to-br from-background to-muted/30">
+    //         <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
+    //             <CardHeader className="pb-4">
+    //                 <div className="flex items-center justify-between">
+    //                     <div className="flex items-center gap-3">
+    //                         <div className="p-3 rounded-full bg-primary/10">
+    //                             <Heart className="h-6 w-6 text-primary" />
+    //                         </div>
+    //                         <div>
+    //                             <h2 className="text-2xl font-bold text-card-foreground">Heart Attack Risk Prediction</h2>
+    //                             <p className="text-muted-foreground">AI-Powered Cardiovascular Assessment</p>
+    //                         </div>
+    //                     </div>
+    //                     <Badge variant="secondary" className="px-3 py-1">
+    //                         <Shield className="h-4 w-4 mr-1" />
+    //                         ML Verified
+    //                     </Badge>
+    //                 </div>
+    //             </CardHeader>
 
-  return (
+    //             <CardContent className="space-y-6">
+    //                 {/* Risk Score Display */}
+    //                 <div className="text-center space-y-4">
+    //                     <div className="relative">
+    //                         <div className="text-6xl font-bold text-primary mb-2">{riskData.percentage}%</div>
+    //                         <p className="text-lg text-muted-foreground">Heart Disease Risk Score</p>
+    //                     </div>
+
+    //                     {/* Risk Level Badge */}
+    //                     <div className="flex justify-center">
+    //                         <Badge className={`${getRiskColor(riskData.level)} px-4 py-2 text-lg font-semibold`}>
+    //                             <TrendingDown className="h-4 w-4 mr-2" />
+    //                             {riskData.level} Risk
+    //                         </Badge>
+    //                     </div>
+    //                 </div>
+
+    //                 {/* Progress Visualization */}
+    //                 <div className="space-y-3">
+    //                     <div className="flex justify-between text-sm text-muted-foreground">
+    //                         <span>Risk Assessment</span>
+    //                         <span>{riskData.percentage}% of 100%</span>
+    //                     </div>
+    //                     <div className="relative">
+    //                         <Progress value={riskData.percentage} className="h-3 bg-muted" />
+    //                         <div
+    //                             className={`absolute top-0 left-0 h-3 rounded-full transition-all duration-1000 ${getProgressColor(riskData.level)}`}
+    //                             style={{ width: `${riskData.percentage}%` }}
+    //                         />
+    //                     </div>
+    //                     <div className="flex justify-between text-xs text-muted-foreground">
+    //                         <span>Low Risk</span>
+    //                         <span>Moderate Risk</span>
+    //                         <span>High Risk</span>
+    //                     </div>
+    //                 </div>
+    //             </CardContent>
+    //         </Card>
+    //     </div>
+    // )
+
+    return (
     <div className="w-full max-w-2xl mx-auto p-6 bg-gradient-to-br from-background to-muted/30">
       <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
         <CardHeader className="pb-4">
@@ -265,6 +209,35 @@ export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) 
               <span>High Risk</span>
             </div>
           </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3">
+            <Button
+              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
+              onClick={() => setShowDetails(!showDetails)}
+            >
+              <Info className="h-4 w-4 mr-2" />
+              {showDetails ? "Hide Details" : "View Recommendations"}
+            </Button>
+            <Button variant="outline" className="flex-1 bg-transparent">
+              Download Report
+            </Button>
+          </div>
+
+          {/* Recommendations Panel */}
+          {showDetails && (
+            <div className="mt-6 p-4 bg-muted/50 rounded-lg border border-border/50">
+              <h3 className="font-semibold text-card-foreground mb-3">Personalized Recommendations</h3>
+              <ul className="space-y-2">
+                {riskData.recommendations.map((rec, index) => (
+                  <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
+                    {rec}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
