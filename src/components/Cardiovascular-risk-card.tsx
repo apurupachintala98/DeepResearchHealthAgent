@@ -209,35 +209,6 @@ export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) 
               <span>High Risk</span>
             </div>
           </div>
-
-          {/* Action Buttons */}
-          <div className="flex gap-3">
-            <Button
-              className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground"
-              onClick={() => setShowDetails(!showDetails)}
-            >
-              <Info className="h-4 w-4 mr-2" />
-              {showDetails ? "Hide Details" : "View Recommendations"}
-            </Button>
-            <Button variant="outline" className="flex-1 bg-transparent">
-              Download Report
-            </Button>
-          </div>
-
-          {/* Recommendations Panel */}
-          {showDetails && (
-            <div className="mt-6 p-4 bg-muted/50 rounded-lg border border-border/50">
-              <h3 className="font-semibold text-card-foreground mb-3">Personalized Recommendations</h3>
-              <ul className="space-y-2">
-                {riskData.recommendations.map((rec, index) => (
-                  <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    {rec}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
         </CardContent>
       </Card>
     </div>

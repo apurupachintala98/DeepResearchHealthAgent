@@ -254,7 +254,7 @@ export const HealthAnalyticsDashboard: React.FC<HealthAnalyticsDashboardProps> =
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-5 md:grid-cols-5 lg:grid-cols-5 gap-6">
         {healthMetrics.map((metric) => (
           <Card
             key={metric.id}

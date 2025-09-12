@@ -434,8 +434,8 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
         </Row>
 
 
-        <Row title="Heart Attack Risk Prediction">
-          {/* <div className="cardio-risk-box">
+       {/* <Row title="Heart Attack Risk Prediction"> */}
+          {/* <div classN ame="cardio-risk-box">
             <div className="cardio-risk-header">
               <span>Cardiovascular Risk Assessment</span>
               <span className="cardio-risk-icon">❤️</span>
@@ -451,7 +451,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
             <div className="risk-level">Low Risk</div>
           </div> */}
           <CardiovascularRiskCard result={result}/>
-        </Row>
+        {/* </Row> */}
 
       </div>
 
