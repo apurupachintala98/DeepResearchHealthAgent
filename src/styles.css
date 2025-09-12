@@ -242,6 +242,13 @@ select:focus {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
+
+.health-section {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+    min-width: 0;
+}
 .task {
   padding: 16px;
   border-radius: 16px;
