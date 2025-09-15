@@ -178,9 +178,11 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
         className="tab-navigation"
         style={{
           display: "flex",
-          gap: "8px",
+          justifyContent: "center",
+          gap: "12px",
           marginBottom: "20px",
           marginTop: "20px",
+          width: "100%",
         }}
       >
         {tabs.map((tab) => {
