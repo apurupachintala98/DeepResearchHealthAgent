@@ -275,6 +275,10 @@ select:focus {
 }
 
 /* Results page */
+
+.results {
+  background: "#fff";
+}
 .results__header {
   display: flex;
   align-items: center;
