@@ -354,7 +354,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                         ICD-10 Code Frequency Analysis
                       </h3>
                       <div>
-                        <DiagnosisBarChart
+                        {/* <DiagnosisBarChart
                           categories={[
                             "C92.91",
                             "F31.70",
@@ -375,7 +375,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                             "Z90.13",
                           ]}
                           data={[1, 1, 2, 1, 1, 2, 1, 4, 1, 2, 2, 1, 1, 2, 2, 2, 2]}
-                        />
+                        /> */}
                         <div className="mt-6">
                           <h4 className="text-lg font-semibold">Most Frequent Diagnosis Codes:</h4>
                           <ul className="list-disc list-inside space-y-1">
@@ -413,7 +413,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                         Service Code Frequency Analysis
                       </h3>
                       <div>
-                        <DiagnosisBarChart
+                        {/* <DiagnosisBarChart
                           categories={[
                             "C92.91",
                             "F31.70",
@@ -434,7 +434,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                             "Z90.13",
                           ]}
                           data={[1, 1, 2, 1, 1, 2, 1, 4, 1, 2, 2, 1, 1, 2, 2, 2, 2]}
-                        />
+                        /> */}
                         <div className="mt-6">
                           <h4 className="text-lg font-semibold">Most Frequent Service Codes:</h4>
                           <ul className="list-disc list-inside space-y-1">
