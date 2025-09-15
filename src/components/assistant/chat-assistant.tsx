@@ -1,94 +1,210 @@
-"use client"
+"use client";
 
-import { useEffect, useRef, useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Mic, Send, Bot as Robot, Menu, ChevronLeft, Play, Pause } from "lucide-react"
-import { QuickActions } from "./quick-actions"
-import { MessageItem, type Message } from "./message-item"
+import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Mic, Send, Bot as Robot, Menu, ChevronLeft, Play, Pause } from "lucide-react";
+import { QuickActions } from "./quick-actions";
+import { MessageItem, type Message } from "./message-item";
+import AgentService from "@/src/api/AgentService";
+import ChatClearButton from "./ChatClearButton";
 
-export function ChatAssistant() {
-  const [messages, setMessages] = useState<Message[]>([
-    { id: "m1", role: "assistant", text: "Welcome to your Medical Assistant. How can I help today?" },
-    { id: "m2", role: "user", text: "Show my latest medications." },
-    { id: "m3", role: "assistant", text: "Current prescriptions: Atorvastatin 20mg, Metformin 500mg (BID)." },
-  ])
-  const [input, setInput] = useState("")
-  const viewportRef = useRef<HTMLDivElement | null>(null)
+type ChatAssistantProps = {
+  sessionId?: string;
+};
 
-  const [isStreaming, setIsStreaming] = useState(false)
-  const streamTimer = useRef<ReturnType<typeof setInterval> | null>(null)
-  const streamingMessageId = useRef<string | null>(null)
-  const streamIndex = useRef(0)
+type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+};
+
+export function ChatAssistant({ sessionId }: ChatAssistantProps) {
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
+  const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const viewportRef = useRef<HTMLDivElement | null>(null);
+
   const STREAM_TEXT =
-    "Here’s a quick demo. I can summarize medical records, list medications, and help with risk assessments. Use Quick Actions on the left to insert questions, or type your own."
+    "Here’s a quick demo. I can summarize medical records, list medications, and help with risk assessments.";
+
+  const streamTimer = useRef<ReturnType<typeof setInterval> | null>(null);
+  const streamingMessageId = useRef<string | null>(null);
+  const streamIndex = useRef(0);
+
+  const getSessionId = () => sessionId || AgentService.getActiveSessionId();
+
+  function clearChat() {
+    pauseStream();
+    setMessages([]);
+    setChatHistory([]);
+    streamingMessageId.current = null;
+    streamIndex.current = 0;
+  }
 
   useEffect(() => {
     return () => {
-      if (streamTimer.current) clearInterval(streamTimer.current)
+      if (streamTimer.current) clearInterval(streamTimer.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (viewportRef.current) {
+      viewportRef.current.scrollTop = viewportRef.current.scrollHeight;
     }
-  }, [])
+  }, [messages]);
 
-  function startStream() {
-    if (isStreaming) return
-    setIsStreaming(true)
+  const startStream = () => {
+    if (isStreaming) return;
+    setIsStreaming(true);
 
-    // if we don't have a message for streaming yet, create one
     if (!streamingMessageId.current) {
-      const id = crypto.randomUUID()
-      streamingMessageId.current = id
-      streamIndex.current = 0
-      setMessages((m) => [...m, { id, role: "assistant", text: "" }])
+      const id = crypto.randomUUID();
+      streamingMessageId.current = id;
+      streamIndex.current = 0;
+      setMessages((m) => [...m, { id, role: "assistant", text: "" }]);
     }
 
     streamTimer.current = setInterval(() => {
-      const next = streamIndex.current + 1
-      streamIndex.current = next
-      const text = STREAM_TEXT.slice(0, next)
+      const next = streamIndex.current + 1;
+      streamIndex.current = next;
+      const text = STREAM_TEXT.slice(0, next);
 
-      setMessages((m) => m.map((msg) => (msg.id === streamingMessageId.current ? { ...msg, text } : msg)))
+      setMessages((m) =>
+        m.map((msg) => (msg.id === streamingMessageId.current ? { ...msg, text } : msg))
+      );
 
       if (next >= STREAM_TEXT.length) {
-        if (streamTimer.current) clearInterval(streamTimer.current)
-        streamTimer.current = null
-        setIsStreaming(false)
-        streamingMessageId.current = null
-        streamIndex.current = 0
+        clearInterval(streamTimer.current!);
+        streamTimer.current = null;
+        setIsStreaming(false);
+        streamingMessageId.current = null;
+        streamIndex.current = 0;
       }
-    }, 28)
-  }
+    }, 28);
+  };
 
-  function pauseStream() {
+  const pauseStream = () => {
     if (streamTimer.current) {
-      clearInterval(streamTimer.current)
-      streamTimer.current = null
+      clearInterval(streamTimer.current);
+      streamTimer.current = null;
     }
-    setIsStreaming(false)
-  }
+    setIsStreaming(false);
+  };
 
-  function send() {
-    pauseStream()
-    const text = input.trim()
-    if (!text) return
-    setMessages((m) => [
-      ...m,
-      { id: crypto.randomUUID(), role: "user", text },
-      { id: crypto.randomUUID(), role: "assistant", text: "Thanks — I’ll fetch that information now." },
-    ])
-    setInput("")
-  }
+  const send = async () => {
+    pauseStream();
+    const text = input.trim();
+    const sid = getSessionId();
+    if (!text || !sid) {
+      setMessages((m) => [
+        ...m,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          text: "Session ID is missing. Please run analysis first.",
+        },
+      ]);
+      return;
+    }
+
+    const userMessage: Message = {
+      id: crypto.randomUUID(),
+      role: "user",
+      text,
+    };
+
+    const newChatEntry: ChatMessage = { role: "user", content: text };
+
+    setMessages((m) => [...m, userMessage]);
+    setChatHistory((h) => [...h, newChatEntry]);
+    setInput("");
+    setLoading(true);
+
+    try {
+      // const response = await AgentService.sendChatMessage(sid, text, [...chatHistory, newChatEntry]);
+      const response = await AgentService.sendChatMessage({
+        sessionId: sid,
+        question: text,
+        chatHistory: [...chatHistory, newChatEntry],
+      });
+      
+
+      const assistantMessage: Message = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        text: response.response || "No response received.",
+      };
+
+      setMessages((m) => [...m, assistantMessage]);
+      setChatHistory((h) => [...h, { role: "assistant", content: assistantMessage.text }]);
+    } catch (error) {
+      setMessages((m) => [
+        ...m,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          text: "Something went wrong. Please try again.",
+        },
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   function handleSelectQuestion(question: string) {
-    pauseStream()
-    setMessages((m) => [
-      ...m,
-      { id: crypto.randomUUID(), role: "user", text: question },
-      { id: crypto.randomUUID(), role: "assistant", text: "Understood. Let me analyze the records for that." },
-    ])
+    pauseStream();
+    const sid = getSessionId();
+    if (!sid) return;
+
+    const userMessage: Message = {
+      id: crypto.randomUUID(),
+      role: "user",
+      text: question,
+    };
+
+    const newChatEntry: ChatMessage = { role: "user", content: question };
+
+    setMessages((m) => [...m, userMessage]);
+    setChatHistory((h) => [...h, newChatEntry]);
+    setLoading(true);
+
+    // AgentService.sendChatMessage(sid, question, [...chatHistory, newChatEntry])
+    AgentService.sendChatMessage({
+      sessionId: sid,
+      question,
+      chatHistory: [...chatHistory, newChatEntry],
+    })
+    
+      .then((response) => {
+        const assistantMessage: Message = {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          text: response.response || "No response received.",
+        };
+
+        setMessages((m) => [...m, assistantMessage]);
+        setChatHistory((h) => [...h, { role: "assistant", content: assistantMessage.text }]);
+      })
+      .catch(() => {
+        setMessages((m) => [
+          ...m,
+          {
+            id: crypto.randomUUID(),
+            role: "assistant",
+            text: "Something went wrong. Please try again.",
+          },
+        ]);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
+
 
   return (
     <div className="grid w-full grid-cols-1 gap-6 p-4 md:grid-cols-[320px_1fr] md:p-6" style={{ gridTemplateColumns: "0fr 1fr" }}>
@@ -129,12 +245,7 @@ export function ChatAssistant() {
             <span className="ml-2 text-xs text-slate-500">{isStreaming ? "(demo playing)" : "(demo paused)"}</span>
           </p>
           <div className="flex items-center gap-2">
-            <Button
-              size="icon"
-              variant="ghost"
-              className="h-8 w-8 rounded-full text-slate-600 hover:bg-slate-100"
-              aria-label="Back"
-            >
+            <Button size="icon" variant="ghost" className="h-8 w-8 rounded-full text-slate-600 hover:bg-slate-100" aria-label="Back">
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <Button
@@ -171,6 +282,11 @@ export function ChatAssistant() {
             </div>
           </ScrollArea>
         </Card>
+
+
+        {/* Clear Chat Button */}
+        <ChatClearButton onClear={clearChat} />
+
 
         {/* Composer */}
         <div className="mt-3 flex items-center gap-2 rounded-full bg-white p-1 pl-3 ring-1 ring-slate-200">

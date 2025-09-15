@@ -7,6 +7,7 @@ import ClaimsTable from "./ClaimsTable"
 import DiagnosisBarChart from "./DiagnosisBarChart"
 import { HealthAnalyticsDashboard } from "./health-analytics-dashboard"
 import { CardiovascularRiskCard } from "./cardiovascular-risk-card"
+import ReactJson from 'react-json-view';
 
 export type ICD10Entry = {
   code: string;
@@ -181,7 +182,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                       Copy JSON
                     </button>
                   )}
-                  <pre
+                  {/* <pre
                     style={{
                       whiteSpace: "pre-wrap",
                       fontFamily: "monospace",
@@ -190,7 +191,16 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                     }}
                   >
                     {jsonString}
-                  </pre>
+                  </pre> */}
+                   <ReactJson
+                    src={tabData[selectedTab]}
+                    name={false}
+                    collapsed={false} // default expanded
+                    enableClipboard={true}
+                    displayDataTypes={false}
+                    style={{ fontSize: "14px", backgroundColor: "#fafafa", padding: "8px", borderRadius: "6px" }}
+                  />
+
                 </div>
               </div>
             )
@@ -450,8 +460,11 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
 
             <div className="risk-level">Low Risk</div>
           </div> */}
-          <CardiovascularRiskCard result={result}/>
+          {/* <CardiovascularRiskCard result={result}/> */}
         {/* </Row> */}
+        <Row title="Heart Attack Risk Prediction">
+          <CardiovascularRiskCard result={result}/>
+        </Row>
 
       </div>
 

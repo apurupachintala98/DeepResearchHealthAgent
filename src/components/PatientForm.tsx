@@ -93,7 +93,7 @@ export const PatientForm: React.FC<Props> = ({ initialValues, onSubmit }) => {
 
     if (!isValid) return;
 
-    onSubmit(values); // ✅ Pass form data to parent
+    onSubmit(values); //  Pass form data to parent
   }
 
   return (

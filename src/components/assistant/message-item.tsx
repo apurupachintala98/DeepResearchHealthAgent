@@ -16,14 +16,23 @@ export function MessageItem({ role, text }: Message) {
           </AvatarFallback>
         </Avatar>
       )}
-      <Card
+      {/* <Card
         className={cn(
           "max-w-[90%] rounded-2xl px-4 py-2 text-sm leading-relaxed",
           isAssistant ? "bg-white text-slate-800 shadow-sm ring-1 ring-slate-200" : "bg-blue-600 text-white shadow-sm",
         )}
       >
         {text}
+      </Card> */}
+      <Card
+        className={cn(
+          "max-w-[90%] rounded-2xl px-4 py-2 text-sm leading-relaxed",
+          isAssistant ? "bg-white text-slate-800 shadow-sm ring-1 ring-slate-200" : "bg-blue-600 text-white shadow-sm"
+        )}
+      >
+        {typeof text === "string" ? text : JSON.stringify(text, null, 2)}
       </Card>
+
       {!isAssistant && (
         <Avatar className="h-8 w-8">
           <AvatarFallback className="bg-slate-200 text-slate-700">
