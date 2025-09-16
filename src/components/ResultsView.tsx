@@ -185,7 +185,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
           width: "100%",
         }}
       >
-        {tabs.map((tab) => {
+         {tabs.map((tab) => {
           const IconComponent = tab.icon
           return (
             <button
@@ -193,7 +193,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
               onClick={() => setActiveTab(tab.id)}
               style={{
                 padding: "10px 16px",
-                border: "1px solid transparent",
+                border: activeTab === tab.id ? "1px solid transparent" : "1px solid #f1f5f9", // added very light border for inactive tabs
                 background: activeTab === tab.id ? "#dbeafe" : "white",
                 cursor: "pointer",
                 fontSize: "14px",
@@ -210,21 +210,22 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.08) translateY(-2px)"
-                e.currentTarget.style.border = "1px solid #3b82f6"
-                e.currentTarget.style.background = "linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%)"
+                e.currentTarget.style.border = "1px solid transparent" // border becomes transparent on hover for gradient effect
+                e.currentTarget.style.background =
+                  "linear-gradient(white, white) padding-box, linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%) border-box"
                 e.currentTarget.style.backgroundSize = "200% 200%"
                 e.currentTarget.style.animation = "gradientShift 1.5s ease infinite"
-               e.currentTarget.style.color = "#ffffff"
+                e.currentTarget.style.color = "#1e40af"
               }}
               onMouseLeave={(e) => {
-               e.currentTarget.style.transform = "scale(1) translateY(0)"
-                e.currentTarget.style.border = "1px solid transparent"
+                e.currentTarget.style.transform = "scale(1) translateY(0)"
+                e.currentTarget.style.border = activeTab === tab.id ? "1px solid transparent" : "1px solid #f1f5f9" // restore subtle border on mouse leave
                 e.currentTarget.style.background = activeTab === tab.id ? "#dbeafe" : "white"
                 e.currentTarget.style.backgroundSize = "100% 100%"
                 e.currentTarget.style.animation = "none"
                 e.currentTarget.style.color = "#1e40af"
               }}
-               onMouseDown={(e) => {
+              onMouseDown={(e) => {
                 e.currentTarget.style.transform = "scale(1.02) translateY(0)"
               }}
               onMouseUp={(e) => {
