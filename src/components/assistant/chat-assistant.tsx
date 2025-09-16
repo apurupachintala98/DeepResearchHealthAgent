@@ -179,11 +179,13 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
 
       // Check if graph is present in the API response
       if (response.graph_present === 1 && (graphData || response.json_graph_data)) {
-        const finalGraphData = graphData || response.json_graph_data
+        const finalGraphData = graphData || response.json_graph_data || null
         setCurrentGraphData(finalGraphData)
         setShowGraphPanel(true)
       }
-
+      console.log(response);
+      console.log(cleanResponse);
+      console.log(graphData);
       const assistantMessage: Message = {
         id: crypto.randomUUID(),
         role: "assistant",
