@@ -31,13 +31,13 @@ export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) 
   const getRiskColor = (level: string) => {
     switch (level) {
       case "Low":
-        return "bg-primary text-primary-foreground"
+        return "text-red-500"
       case "Moderate":
-        return "bg-yellow-500 text-white"
+        return "text-blue-400"
       case "High":
-        return "bg-destructive text-destructive-foreground"
+        return "text-green-500"
       default:
-        return "bg-muted text-muted-foreground"
+        return "text-muted-foreground"
     }
   }
 
@@ -53,20 +53,7 @@ export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) 
         return "bg-muted"
     }
   }
-
-   const getTextColor = (level: string) => {
-    switch (level) {
-      case "Low":
-        return "text-red-500"
-      case "Moderate":
-        return "text-blue-400"
-      case "High":
-        return "text-green-500"
-      default:
-        return "text-muted-foreground"
-    }
-  }
-
+  
  useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimatedPercentage(percentage)
@@ -105,7 +92,7 @@ export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) 
 
             {/* Risk Level Badge */}
             <div className="flex justify-center">
-              <Badge className={`${getTextColor(level)} px-4 py-2 text-lg font-semibold`}>
+              <Badge className={`${getRiskColor(level)} px-4 py-2 text-lg font-semibold`}>
                 <TrendingDown className="h-4 w-4 mr-2" />
                 {level}
               </Badge>

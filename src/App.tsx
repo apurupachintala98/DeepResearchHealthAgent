@@ -166,7 +166,7 @@ export const App: React.FC = () => {
         </div>
       </main>
 
-      <section className="px-6 py-8">
+      <section className="px-6 py-8" style={{background: "#fff"}}>
         {stage === "processing" && <ProgressView isProcessing={isProcessing} onComplete={handleComplete} />}
         {stage === "complete" && result && <ResultsView result={result} onRunAgain={handleRunAgain} />}
       </section>
