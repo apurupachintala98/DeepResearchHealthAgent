@@ -411,9 +411,9 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
             <ResizablePane defaultSize={60} minSize={30} maxSize={80}>
               {/* Chat Section */}
               <div className="h-full flex flex-col">
-                <div className="grid w-full grid-cols-1 gap-6 p-4 md:grid-cols-[320px_1fr] md:p-6 h-full">
+                <div className="flex w-full gap-6 p-4 md:p-6 h-full">
                   {/* Sidebar */}
-                  <aside className="sticky top-4 hidden w-80 min-w-80 max-w-80 shrink-0 overflow-x-hidden self-start md:block">
+                  <aside className="hidden w-80 min-w-80 max-w-80 shrink-0 overflow-x-hidden self-start md:block">
                     <Card className="rounded-3xl bg-white p-4 shadow-md ring-1 ring-slate-100">
                       <h3 className="mb-3 text-base font-semibold text-slate-800">Quick Questions</h3>
                       <QuickActions onSelectQuestion={handleSelectQuestion} />
@@ -428,7 +428,7 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                   </aside>
 
                   {/* Chat Panel */}
-                  <section className="rounded-3xl bg-white p-3 shadow-md ring-1 ring-slate-100 md:p-4 flex flex-col h-full">
+                  <section className="flex-1 rounded-3xl bg-white p-3 shadow-md ring-1 ring-slate-100 md:p-4 flex flex-col h-full">
                     {/* Header */}
                     <header className="flex items-center justify-between rounded-2xl border border-slate-100 bg-white px-4 py-3">
                       <div className="flex items-center gap-3">
@@ -552,9 +552,9 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
               </div>
             </ResizablePane>
           ) : (
-            <div className="grid w-full grid-cols-1 gap-6 p-4 md:grid-cols-[320px_1fr] md:p-6 h-full">
+            <div className="flex w-full gap-6 p-4 md:p-6 h-full">
               {/* Sidebar */}
-              <aside className="sticky top-4 hidden w-80 min-w-80 max-w-80 shrink-0 overflow-x-hidden self-start md:block">
+              <aside className="hidden w-80 min-w-80 max-w-80 shrink-0 overflow-x-hidden self-start md:block">
                 <Card className="rounded-3xl bg-white p-4 shadow-md ring-1 ring-slate-100">
                   <h3 className="mb-3 text-base font-semibold text-slate-800">Quick Questions</h3>
                   <QuickActions onSelectQuestion={handleSelectQuestion} />
@@ -569,7 +569,7 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
               </aside>
 
               {/* Chat Panel */}
-              <section className="rounded-3xl bg-white p-3 shadow-md ring-1 ring-slate-100 md:p-4">
+              <section className="flex-1 rounded-3xl bg-white p-3 shadow-md ring-1 ring-slate-100 md:p-4 flex flex-col h-full">
                 {/* Header */}
                 <header className="flex items-center justify-between rounded-2xl border border-slate-100 bg-white px-4 py-3">
                   <div className="flex items-center gap-3">
@@ -625,7 +625,7 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                 </div>
 
                 {/* Messages */}
-                <Card className="mt-3 rounded-2xl border-none p-2 shadow-none">
+                <Card className="mt-3 rounded-2xl border-none p-2 shadow-none flex-1 overflow-hidden">
                   <ScrollArea className="h-[48vh] md:h-[56vh]" viewportRef={viewportRef}>
                     <div className="space-y-2 p-1" role="list" aria-label="Conversation">
                       {messages.map((m) => (
