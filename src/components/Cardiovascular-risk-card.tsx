@@ -105,7 +105,7 @@ export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) 
               <span>Risk Assessment</span>
               <span>{percentage}% of 100%</span>
             </div>
-             <Progress value={percentage} className={`h-3 ${getProgressColor(level)} transition-all duration-1000 ease-out`} />
+             <Progress value={animatedPercentage} className={`h-3 ${getProgressColor(level)} transition-all duration-1000 ease-out`} />
             <div className="flex justify-between text-xs text-muted-foreground">
               <span>Low Risk</span>
               <span>Moderate Risk</span>
