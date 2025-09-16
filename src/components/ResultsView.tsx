@@ -193,32 +193,43 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
               onClick={() => setActiveTab(tab.id)}
               style={{
                 padding: "10px 16px",
-                border: "none",
-                background: activeTab === tab.id ? "#374151" : "#f3f4f6",
+                border: "2px solid transparent",
+                background: activeTab === tab.id ? "#374151" : "#dbeafe",
                 borderRadius: "8px",
                 cursor: "pointer",
                 fontSize: "14px",
                 fontWeight: activeTab === tab.id ? "500" : "400",
-                color: activeTab === tab.id ? "#ffffff" : "#6b7280",
-                transition: "all 0.2s ease, transform 0.2s ease",
+                color: activeTab === tab.id ? "#ffffff" : "#1e40af",
+                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "8px",
-                minWidth: "120px",
-                boxShadow: activeTab === tab.id ? "0 2px 4px rgba(0,0,0,0.1)" : "none",
+                boxShadow: activeTab === tab.id ? "0 4px 12px rgba(0,0,0,0.15)" : "0 2px 4px rgba(0,0,0,0.05)",
+                position: "relative",
+                overflow: "hidden",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.05)"
-                if (activeTab !== tab.id) {
-                  e.currentTarget.style.background = "#e5e7eb"
-                }
+                e.currentTarget.style.transform = "scale(1.08) translateY(-2px)"
+                e.currentTarget.style.border = "2px solid #3b82f6"
+                e.currentTarget.style.background = "linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%)"
+                e.currentTarget.style.backgroundSize = "200% 200%"
+                e.currentTarget.style.animation = "gradientShift 1.5s ease infinite"
+               e.currentTarget.style.color = "#ffffff"
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)"
-                if (activeTab !== tab.id) {
-                  e.currentTarget.style.background = "#f3f4f6"
-                }
+               e.currentTarget.style.transform = "scale(1) translateY(0)"
+                e.currentTarget.style.border = "2px solid transparent"
+                e.currentTarget.style.background = activeTab === tab.id ? "#374151" : "#dbeafe"
+                e.currentTarget.style.backgroundSize = "100% 100%"
+                e.currentTarget.style.animation = "none"
+                e.currentTarget.style.color = activeTab === tab.id ? "#ffffff" : "#1e40af"
+              }}
+               onMouseDown={(e) => {
+                e.currentTarget.style.transform = "scale(1.02) translateY(0)"
+              }}
+              onMouseUp={(e) => {
+                e.currentTarget.style.transform = "scale(1.08) translateY(-2px)"
               }}
             >
               <IconComponent size={16} />
@@ -227,6 +238,14 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
           )
         })}
       </div>
+
+      <style jsx>{`
+        @keyframes gradientShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+      `}</style>
 
       <div className="tab-content-area">
         {activeTab === 0 && (
