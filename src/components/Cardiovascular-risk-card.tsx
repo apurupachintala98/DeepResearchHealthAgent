@@ -31,13 +31,13 @@ export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) 
   const getRiskColor = (level: string) => {
     switch (level) {
       case "Low":
-        return "text-red-500"
+        return "bg-primary text-primary-foreground"
       case "Moderate":
-        return "text-blue-400"
+        return "bg-yellow-500 text-white"
       case "High":
-        return "text-green-500"
+        return "bg-destructive text-destructive-foreground"
       default:
-        return "text-muted-foreground"
+        return "bg-muted text-muted-foreground"
     }
   }
 
@@ -51,6 +51,19 @@ export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) 
         return "bg-destructive"
       default:
         return "bg-muted"
+    }
+  }
+
+   const getTextColor = (level: string) => {
+    switch (level) {
+      case "Low":
+        return "text-red-500"
+      case "Moderate":
+        return "text-blue-400"
+      case "High":
+        return "text-green-500"
+      default:
+        return "text-muted-foreground"
     }
   }
   
