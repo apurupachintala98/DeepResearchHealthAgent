@@ -175,6 +175,8 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
         chatHistory: [...chatHistory, newChatEntry],
       })
 
+       console.log(response);
+
       const { cleanResponse, graphData } = parseGraphData(response.response || "No response received.")
 
       // Check if graph is present in the API response
@@ -230,9 +232,11 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
       question,
       chatHistory: [...chatHistory, newChatEntry],
     })
+
       .then((response: ChatResponse) => {
         const { cleanResponse, graphData } = parseGraphData(response.response || "No response received.")
 
+         console.log(response);
         // Check if graph is present in the API response
         if (response.graph_present === 1 && (graphData || response.json_graph_data)) {
           const finalGraphData = graphData || response.json_graph_data || null
