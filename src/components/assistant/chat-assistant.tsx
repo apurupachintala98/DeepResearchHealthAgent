@@ -11,6 +11,7 @@ import { QuickActions } from "./quick-actions"
 import { MessageItem, type Message } from "./message-item"
 import { GraphSidePanel } from "./graph-side-panel"
 import AgentService from "@/src/api/AgentService"
+import { ChatResponse as ApiChatResponse } from "@/src/api/AgentService";
 import ChatClearButton from "./ChatClearButton"
 
 type ChatAssistantProps = {
@@ -22,11 +23,14 @@ type ChatMessage = {
   content: string
 }
 
-type ChatResponse = {
-  response?: string
-  graph_present?: number
-  json_graph_data?: GraphData
-}
+export type JsonGraphData = {
+  categories: string[];
+  data: number[];
+  graph_type: string;
+  title: string;
+};
+
+type ChatResponse = ApiChatResponse;
 
 type GraphData = {
   categories?: string[]
@@ -35,6 +39,7 @@ type GraphData = {
   title: string
   [key: string]: any
 }
+
 
 function parseGraphData(response: string): { cleanResponse: string; graphData: GraphData | null } {
   const graphStartMarker = "***GRAPH_START***"
@@ -175,7 +180,7 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
         chatHistory: [...chatHistory, newChatEntry],
       })
 
-       console.log(response);
+      console.log(response);
 
       const { cleanResponse, graphData } = parseGraphData(response.response || "No response received.")
 
@@ -236,7 +241,7 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
       .then((response: ChatResponse) => {
         const { cleanResponse, graphData } = parseGraphData(response.response || "No response received.")
 
-         console.log(response);
+        console.log(response);
         // Check if graph is present in the API response
         if (response.graph_present === 1 && (graphData || response.json_graph_data)) {
           const finalGraphData = graphData || response.json_graph_data || null
