@@ -189,26 +189,18 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
                         className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-400 hover:border-gray-300 bg-card/50 backdrop-blur-sm min-w-0"
                     >
 
-                        <CardHeader className="pb-2 px-3 pt-3">
-                            <div className="flex justify-between items-start">
-                                {/* Left side: icon and title */}
-                                <div>
-                                    <div className="flex items-center gap-2">
-                                        <div className="p-1.5 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                                            {metric.icon}
-                                        </div>
-                                        {/* Verified icon */}
-                                        {getStatusIcon(metric.status) && (
-                                            <div className={`p-1 rounded-full ${getStatusColor(metric.status)}`}>
-                                                {getStatusIcon(metric.status)}
-                                            </div>
-                                        )}
-                                    </div>
-                                    <CardTitle className="text-xs font-medium text-muted-foreground mt-1">
-                                        {metric.label}
-                                    </CardTitle>
+                        <CardHeader className="pb-2 px-3 pt-3" style={{ display: "grid", gridTemplateColumns: "1fr auto" }}>
+                            <div className="flex items-center justify-between">
+                                <div className="p-1.5 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                                    {metric.icon}
                                 </div>
+                                {getStatusIcon(metric.status) && (
+                                    <div className={`p-1 rounded-full ${getStatusColor(metric.status)}`}>
+                                        {getStatusIcon(metric.status)}
+                                    </div>
+                                )}
                             </div>
+                            <CardTitle className="text-xs font-medium text-muted-foreground truncate">{metric.label}</CardTitle>
                         </CardHeader>
 
 
