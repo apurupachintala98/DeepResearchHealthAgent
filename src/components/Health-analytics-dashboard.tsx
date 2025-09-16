@@ -199,8 +199,6 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
                             <CardTitle className="text-xs font-medium text-muted-foreground truncate">{metric.label}</CardTitle>
                         </CardHeader>
 
-
-
                         <CardContent className="pt-0 px-3 pb-3">
                             <div className="space-y-2">
                                 <div className="flex items-center justify-between">
