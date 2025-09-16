@@ -58,7 +58,7 @@ export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) 
 
   return (
     <div className="w-full max-w-2xl mx-auto p-6 bg-gradient-to-br from-background to-muted/30">
-      <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm">
+      <Card className="border-0 shadow-2xl bg-card/80 backdrop-blur-sm" style={{ border: "1px solid #e9e9e9" }}>
         <CardHeader className="pb-4" style={{ display: "grid", gridTemplateColumns: "1fr auto" }}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -100,13 +100,14 @@ export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) 
               <span>Risk Assessment</span>
               <span>{percentage}% of 100%</span>
             </div>
-            <div className="relative">
+             <Progress value={percentage} className={`h-3 ${getProgressColor(level)}`} />
+            {/* <div className="relative">
               <Progress value={percentage} className="h-3 bg-muted" />
               <div
                 className={`absolute top-0 left-0 h-3 rounded-full transition-all duration-1000 ${getProgressColor(level)}`}
                 style={{ width: `${percentage}%` }}
               />
-            </div>
+            </div> */}
             <div className="flex justify-between text-xs text-muted-foreground">
               <span>Low Risk</span>
               <span>Moderate Risk</span>
