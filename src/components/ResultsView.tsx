@@ -193,13 +193,13 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
               onClick={() => setActiveTab(tab.id)}
               style={{
                 padding: "10px 16px",
-                border: "2px solid transparent",
-                background: activeTab === tab.id ? "#374151" : "#dbeafe",
+                border: "1px solid transparent",
+                background: activeTab === tab.id ? "#dbeafe" : "white",
                 borderRadius: "8px",
                 cursor: "pointer",
                 fontSize: "14px",
                 fontWeight: activeTab === tab.id ? "500" : "400",
-                color: activeTab === tab.id ? "#ffffff" : "#1e40af",
+                color: activeTab === tab.id ? "#1e40af" : "#1e40af",
                 transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
                 display: "flex",
                 alignItems: "center",
@@ -211,7 +211,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.transform = "scale(1.08) translateY(-2px)"
-                e.currentTarget.style.border = "2px solid #3b82f6"
+                e.currentTarget.style.border = "1px solid #3b82f6"
                 e.currentTarget.style.background = "linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%)"
                 e.currentTarget.style.backgroundSize = "200% 200%"
                 e.currentTarget.style.animation = "gradientShift 1.5s ease infinite"
@@ -219,11 +219,11 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
               }}
               onMouseLeave={(e) => {
                e.currentTarget.style.transform = "scale(1) translateY(0)"
-                e.currentTarget.style.border = "2px solid transparent"
-                e.currentTarget.style.background = activeTab === tab.id ? "#374151" : "#dbeafe"
+                e.currentTarget.style.border = "1px solid transparent"
+                e.currentTarget.style.background = activeTab === tab.id ? "#dbeafe" : "white"
                 e.currentTarget.style.backgroundSize = "100% 100%"
                 e.currentTarget.style.animation = "none"
-                e.currentTarget.style.color = activeTab === tab.id ? "#ffffff" : "#1e40af"
+                e.currentTarget.style.color = "#1e40af"
               }}
                onMouseDown={(e) => {
                 e.currentTarget.style.transform = "scale(1.02) translateY(0)"
