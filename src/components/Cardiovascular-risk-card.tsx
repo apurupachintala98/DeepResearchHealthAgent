@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { Heart, TrendingDown, Shield, Info } from "lucide-react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { AnalysisResult } from "./ResultsView"
 
 
@@ -23,7 +23,7 @@ interface CardiovascularRiskCardProps {
 
 export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) {
   const [showDetails, setShowDetails] = useState(false)
-
+   const [animatedPercentage, setAnimatedPercentage] = useState(0)
 
   const percentage = Math.round(result.heartRisk.score)
   const level = result.heartRisk.level
@@ -54,7 +54,12 @@ export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) 
     }
   }
 
-
+ useEffect(() => {
+    const timeout = setTimeout(() => {
+      setAnimatedPercentage(percentage)
+    }, 100) // slight delay before starting animation
+    return () => clearTimeout(timeout)
+  }, [percentage])
 
   return (
     <div className="w-full max-w-2xl mx-auto p-6 bg-gradient-to-br from-background to-muted/30">
@@ -100,14 +105,7 @@ export function CardiovascularRiskCard({ result }: CardiovascularRiskCardProps) 
               <span>Risk Assessment</span>
               <span>{percentage}% of 100%</span>
             </div>
-             <Progress value={percentage} className={`h-3 ${getProgressColor(level)}`} />
-            {/* <div className="relative">
-              <Progress value={percentage} className="h-3 bg-muted" />
-              <div
-                className={`absolute top-0 left-0 h-3 rounded-full transition-all duration-1000 ${getProgressColor(level)}`}
-                style={{ width: `${percentage}%` }}
-              />
-            </div> */}
+             <Progress value={percentage} className={`h-3 ${getProgressColor(level)} transition-all duration-1000 ease-out`} />
             <div className="flex justify-between text-xs text-muted-foreground">
               <span>Low Risk</span>
               <span>Moderate Risk</span>
