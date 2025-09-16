@@ -195,7 +195,6 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                 padding: "10px 16px",
                 border: "1px solid transparent",
                 background: activeTab === tab.id ? "#dbeafe" : "white",
-                borderRadius: "8px",
                 cursor: "pointer",
                 fontSize: "14px",
                 fontWeight: activeTab === tab.id ? "500" : "400",
