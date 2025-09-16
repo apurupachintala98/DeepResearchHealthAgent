@@ -180,16 +180,12 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
             {/* Metrics Grid */}
             <div className="health-section">
                 {healthMetrics.map((metric) => (
-                    // <Card
-                    //     key={metric.id}
-                    //     className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 shadow-sm bg-card/50 backdrop-blur-sm min-w-0"
-                    // >
                     <Card
                         key={metric.id}
                         className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-400 hover:border-gray-300 bg-card/50 backdrop-blur-sm min-w-0"
                     >
 
-                        <CardHeader className="pb-2 px-3 pt-3" style={{ display: "grid", gridTemplateColumns: "1fr auto" }}>
+                        <CardHeader className="pb-2 px-3 pt-3" style={{ display: "grid", gridTemplateColumns: "none" }}>
                             <div className="flex items-center justify-between">
                                 <div className="p-1.5 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                                     {metric.icon}
