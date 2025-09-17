@@ -5,7 +5,7 @@ import { useState } from "react"
 import Link from "next/link"
 import ClaimsTable from "./ClaimsTable"
 import DiagnosisBarChart from "./DiagnosisBarChart"
-import { HealthAnalyticsDashboard } from "../components/Health-analytics-dashboard"
+import  { HealthAnalyticsDashboard }  from "../components/Health-analytics-dashboard"
 import { CardiovascularRiskCard } from "../components/Cardiovascular-risk-card"
 import ReactJson from "react-json-view"
 import { FileText, BarChart3, Search, TrendingUp, Heart } from "lucide-react"
@@ -54,6 +54,19 @@ export type MedicationEntry = {
   path: string
 }
 
+
+// export type AnalysisResult = {
+//   claimsData: string[]
+//   claimsAnalysis: string[]
+//   mcidClaims: string[]
+//   icd10Data: ICD10Entry[]
+//   serviceCodeData: ServiceCodeEntry[]
+//   ndcData: NDCEntry[]
+//   medicationData: MedicationEntry[]
+//   entities: { type: string; value: string }[]
+//   healthTrajectory: string
+//   heartRisk: { score: number; level: string }
+// }
 export type AnalysisResult = {
   claimsData: string[]
   claimsAnalysis: string[]
@@ -65,6 +78,17 @@ export type AnalysisResult = {
   entities: { type: string; value: string }[]
   healthTrajectory: string
   heartRisk: { score: number; level: string }
+
+  // ✅ Add this:
+  entity_extraction?: {
+    diabetics?: string
+    age_group?: string
+    age?: number
+    smoking?: string
+    alcohol?: string
+    blood_pressure?: string
+    medical_conditions?: string[]
+  }
 }
 
 type Props = {
@@ -72,18 +96,78 @@ type Props = {
   onRunAgain: () => void
 }
 
+
 function formatDetails(text: string) {
-  return text
-    .replace(/(?:^|\n)### (.*?)(?=\n|$)/g, '<div class="heading3">$1</div>')
-    .replace(/(?:^|\n)## (.*?)(?=\n|$)/g, '<div class="heading2">$1</div>')
-    .replace(/(?:^|\n)# (.*?)(?=\n|$)/g, '<div class="heading1">$1</div>')
-    .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
-    .replace(/(?:^|\n)- (.*?)(?=\n|$)/g, "<li>$1</li>")
-    .replace(/(?:^|\n)\d+\. (.*?)(?=\n|$)/g, "<li>$1</li>")
-    .replace(/(?:^|\n)🔮 (.*?)(?=\n|$)/g, '<div class="heading3">🔮 $1</div>')
+  const pastelColors = [
+    { bg: "#fef9f1", border: "#fdebd3", text: "#7c4700" },
+    { bg: "#f0f9ff", border: "#dbeafe", text: "#1e40af" },
+    { bg: "#fef2f2", border: "#fde2e2", text: "#991b1b" },
+    { bg: "#f0fdf4", border: "#d1fae5", text: "#065f46" },
+    { bg: "#f5f3ff", border: "#e9d5ff", text: "#6b21a8" },
+    { bg: "#fff7ed", border: "#ffedd5", text: "#78350f" },
+    { bg: "#ecfdf5", border: "#d1fae5", text: "#047857" },
+    { bg: "#fdf2f8", border: "#fbcfe8", text: "#9d174d" },
+  ];
+
+  const topHeaderColor = { bg: "#e0f7fa", border: "#b2ebf2", text: "#006064" }; // Custom color for # headings
+  let sectionCount = 0;
+
+  const formatted = text
+    // Top-Level Headers (#)
+    .replace(/(?:^|\n)# (.*?)(?=\n|$)/g, (_, title) => {
+      return `
+        </section><section style="background: ${topHeaderColor.bg}; padding: 20px 24px; border: 1px solid ${topHeaderColor.border}; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+          <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem; color: ${topHeaderColor.text};">
+            ${title}
+          </div>
+      `;
+    })
+
+    // Section Headers (##)
+    .replace(/(?:^|\n)## (.*?)(?=\n|$)/g, (_, title) => {
+      const color = pastelColors[sectionCount % pastelColors.length];
+      sectionCount++;
+      return `
+        </section><section style="background: ${color.bg}; padding: 20px 24px; border: 1px solid ${color.border}; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
+          <div style="font-size: 1.3rem; font-weight: 700; margin-bottom: 1rem; color: ${color.text}; border-bottom: 1px solid ${color.border}; padding-bottom: 8px;">
+            ${title}
+          </div>
+      `;
+    })
+
+    // Subsection Headers (###)
+    .replace(/(?:^|\n)### (.*?)(?=\n|$)/g, `
+      <div style="font-size: 1.1rem; font-weight: 600; margin-top: 1.25rem; margin-bottom: 0.5rem; color: #374151;">
+        $1
+      </div>
+    `)
+
+    // Bold text
+    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+
+    // Bullet points
+    .replace(/(?:^|\n)- (.*?)(?=\n|$)/g, (_, item) => `
+      <ul style="padding-left: 1.5rem; margin: 0.25rem 0;">
+        <li style="color: #374151; font-size: 0.95rem;">${item}</li>
+      </ul>
+    `)
+
+    // Numbered points
+    .replace(/(?:^|\n)\d+\. (.*?)(?=\n|$)/g, (_, item) => `
+      <ol style="padding-left: 1.5rem; margin: 0.25rem 0;">
+        <li style="color: #374151; font-size: 0.95rem;">${item}</li>
+      </ol>
+    `)
+
+    // Paragraph spacing
     .replace(/\n\s*\n/g, "</p><p>")
-    .replace(/\n/g, "<br>")
+    .replace(/\n/g, " ")
+    .replace(/^/, "<section><p>")
+    .concat("</p></section>");
+
+  return formatted;
 }
+
 
 const TabContent: React.FC<{
   children: React.ReactNode
@@ -185,7 +269,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
           width: "100%",
         }}
       >
-         {tabs.map((tab) => {
+        {tabs.map((tab) => {
           const IconComponent = tab.icon
           return (
             <button
@@ -503,30 +587,29 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
           <TabContent>
             <div style={{ marginTop: "16px" }}>
               <HealthAnalyticsDashboard result={result} />
+              {/* <HealthAnalyticsDashboard result={{ analysis_results: result }} /> */}
+
             </div>
           </TabContent>
         )}
 
         {activeTab === 3 && (
           <TabContent>
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginTop: "16px" }}>
+            <div style={{
+              marginTop: "16px",
+              padding: "24px",
+              background: "#ffffff",
+              borderRadius: "12px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+              fontSize: "0.95rem",
+              lineHeight: 1.6,
+              color: "#1f2937",
+            }}>
               <div
-                style={{
-                  background: "#f9f9f9",
-                  padding: "16px",
-                  borderRadius: "8px",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-                  whiteSpace: "pre-wrap",
-                  fontSize: "0.95rem",
-                  lineHeight: 1.5,
+                dangerouslySetInnerHTML={{
+                  __html: `<p>${formatDetails(result.healthTrajectory)}</p>`.replace(/<p><\/p>/g, ""),
                 }}
-              >
-                <div
-                  dangerouslySetInnerHTML={{
-                    __html: `<p>${formatDetails(result.healthTrajectory)}</p>`.replace(/<p><\/p>/g, ""),
-                  }}
-                />
-              </div>
+              />
             </div>
           </TabContent>
         )}

@@ -104,6 +104,7 @@ export const App: React.FC = () => {
           })) || [],
         entities: [
           { type: "Diabetes Status", value: analysis.entity_extraction?.diabetics || "Unknown" },
+          { type: "Age", value: String(analysis.entity_extraction?.age ||"unknown") },
           { type: "Age Group", value: analysis.entity_extraction?.age_group || "Unknown" },
           { type: "Smoking Status", value: analysis.entity_extraction?.smoking || "Unknown" },
           { type: "Alcohol Use", value: analysis.entity_extraction?.alcohol || "Unknown" },

@@ -18,68 +18,88 @@ interface HealthMetric {
     trend?: number
 }
 
-interface EntityExtractionData {
-    diabetics: string
-    age_group: string
-    age: number
-    smoking: string
-    alcohol: string
-    blood_pressure: string
-    medical_conditions?: string[]
+interface AnalysisResult {
+    entities: { type: string; value: string }[]
+    heartRisk: {
+        score: number
+        level: string
+    }
+    medicationData: Array<{
+        code: string
+        meaning: string
+        provider: string
+    }>
+    icd10Data: Array<{
+        code: string
+        meaning: string
+    }>
 }
 
 interface HealthAnalyticsDashboardProps {
-    result?: {
-        entities: { type: string; value: string }[]
-    }
+    result: AnalysisResult
 }
 
-const transformApiDataToMetrics = (data: EntityExtractionData): HealthMetric[] => {
+const transformApiDataToMetrics = (entities: { type: string; value: string }[]): HealthMetric[] => {
+    // Create entity map for easy lookup - handle various naming patterns
+    const entityMap = entities.reduce((map, entity) => {
+        const key = entity.type.toLowerCase();
+        map[key] = entity.value;
+        return map;
+    }, {} as Record<string, string>);
+
+    // Map the exact fields from your API response with fallbacks
+    const diabetics = entityMap["diabetes status"] || entityMap["diabetics"] || "yes";
+    const ageGroup = entityMap["age group"] || "older";
+    // const age = parseInt(entityMap["age"] || "60");
+    const age = entityMap["age"] ? parseInt(entityMap["age"]) : 60;
+    const smoking = entityMap["smoking status"] || entityMap["smoking"] || "yes";
+    const alcohol = entityMap["alcohol use"] || entityMap["alcohol"] || "yes";
+    const bloodPressure = entityMap["blood pressure"] || "no idea";
+
     return [
         {
             id: "diabetes",
             label: "Diabetes Status",
-            value: data.diabetics.toUpperCase(),
-            status: data.diabetics === "no" ? "positive" : "warning",
+            value: diabetics.toUpperCase(),
+            status: diabetics === "no" ? "positive" : "warning",
             icon: <Activity className="h-5 w-5" />,
-            description: data.diabetics === "no" ? "No diabetes indicators detected" : "Diabetes condition identified",
-            trend: data.diabetics === "no" ? 0 : undefined,
+            description: diabetics === "no" ? "No diabetes indicators detected" : "Diabetes condition identified",
+            trend: diabetics === "no" ? 0 : undefined,
         },
         {
             id: "age",
             label: "Age Group",
-            value: `${data.age_group.toUpperCase()} (${data.age})`,
+            value: `${ageGroup.toUpperCase()} (${age})`,
             status: "neutral",
             icon: <User className="h-5 w-5" />,
-            description: `${data.age_group} demographic classification, age ${data.age}`,
+            description: `${ageGroup} demographic classification, age ${age}`,
         },
         {
             id: "smoking",
             label: "Smoking Status",
-            value: data.smoking.toUpperCase(),
-            status: data.smoking === "no" ? "positive" : "negative",
+            value: smoking.toUpperCase(),
+            status: smoking === "no" ? "positive" : "negative",
             icon: <Cigarette className="h-5 w-5" />,
-            description: data.smoking === "no" ? "Non-smoker profile confirmed" : "Smoking habit identified",
-            trend: data.smoking === "no" ? 0 : undefined,
+            description: smoking === "no" ? "Non-smoker profile confirmed" : "Smoking habit identified",
+            trend: smoking === "no" ? 0 : undefined,
         },
         {
             id: "alcohol",
             label: "Alcohol Consumption",
-            value: data.alcohol.toUpperCase(),
-            status: data.alcohol === "no" ? "positive" : "warning",
+            value: alcohol.toUpperCase(),
+            status: alcohol === "no" ? "positive" : "warning",
             icon: <Wine className="h-5 w-5" />,
-            description: data.alcohol === "no" ? "No alcohol consumption reported" : "Alcohol consumption reported",
-            trend: data.alcohol === "no" ? 0 : undefined,
+            description: alcohol === "no" ? "No alcohol consumption reported" : "Alcohol consumption reported",
+            trend: alcohol === "no" ? 0 : undefined,
         },
         {
             id: "blood_pressure",
             label: "Blood Pressure",
-            value: data.blood_pressure.toUpperCase(),
-            status: data.blood_pressure === "diagnosed" ? "warning" : "positive",
+            value: bloodPressure.toUpperCase(),
+            status: bloodPressure === "diagnosed" ? "warning" : "positive",
             icon: <Heart className="h-5 w-5" />,
-            description:
-                data.blood_pressure === "diagnosed" ? "Hypertension under medical supervision" : "Normal blood pressure",
-            trend: data.blood_pressure === "diagnosed" ? -5 : 0,
+            description: bloodPressure === "diagnosed" ? "Hypertension under medical supervision" : "Normal blood pressure",
+            trend: bloodPressure === "diagnosed" ? -5 : 0,
         },
     ]
 }
@@ -109,35 +129,22 @@ const getStatusIcon = (status: string) => {
 }
 
 export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardProps) {
-    // Extract entity values from result.entities and build data object
-    const entityMap =
-        result?.entities.reduce(
-            (map, entity) => {
-                map[entity.type.toLowerCase()] = entity.value
-                return map
-            },
-            {} as Record<string, string>,
-        ) || {}
-
-    const data: EntityExtractionData = {
-        diabetics: entityMap["diabetics"] || "no",
-        age_group: entityMap["age group"] || "senior",
-        age: Number.parseInt(entityMap["age"]) || 69,
-        smoking: entityMap["smoking"] || "no",
-        alcohol: entityMap["alcohol"] || "no",
-        blood_pressure: entityMap["blood pressure"] || "diagnosed",
-        medical_conditions: entityMap["medical conditions"] ? entityMap["medical conditions"].split(",") : [],
-    }
-
-    const healthMetrics = transformApiDataToMetrics(data)
+    const healthMetrics = transformApiDataToMetrics(result.entities);
 
     const getRiskLevel = () => {
+        // Create entity map for risk calculation
+        const entityMap = result.entities.reduce((map, entity) => {
+            const key = entity.type.toLowerCase();
+            map[key] = entity.value.toLowerCase();
+            return map;
+        }, {} as Record<string, string>);
+
         const riskFactors = [
-            data.diabetics !== "no",
-            data.smoking !== "no",
-            data.alcohol !== "no",
-            data.blood_pressure === "diagnosed",
-        ].filter(Boolean).length
+            (entityMap["diabetes status"] || entityMap["diabetics"]) !== "no",
+            (entityMap["smoking status"] || entityMap["smoking"]) !== "no",
+            (entityMap["alcohol use"] || entityMap["alcohol"]) !== "no",
+            entityMap["blood pressure"] === "diagnosed",
+        ].filter(Boolean).length;
 
         if (riskFactors === 0) return { level: "Low Risk", color: "bg-chart-1 text-white hover:bg-chart-1/90" }
         if (riskFactors <= 2) return { level: "Moderate Risk", color: "bg-chart-3 text-white hover:bg-chart-3/90" }
