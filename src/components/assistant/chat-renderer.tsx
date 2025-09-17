@@ -50,7 +50,7 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
       case "diagnosis_frequency":
         // Bar chart for ICD-10 diagnosis code occurrences
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" angle={-45} textAnchor="end" height={80} fontSize={12} />
@@ -68,7 +68,7 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
       case "medication_distribution":
         // Pie chart for medication usage patterns
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <PieChart>
               <Pie
                 data={chartData}
@@ -93,7 +93,7 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
       case "risk_assessment":
         // Horizontal bar chart for health risk percentages
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <BarChart data={chartData} layout="horizontal" margin={{ top: 20, right: 30, left: 80, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" domain={[0, 100]} />
@@ -108,7 +108,7 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
       case "timeline":
         // Line chart for healthcare activities over time
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
@@ -133,7 +133,7 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
       case "condition_distribution":
         // Pie chart for medical condition presence
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <PieChart>
               <Pie
                 data={chartData}
@@ -157,7 +157,7 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
 
       case "bar_chart":
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
@@ -171,7 +171,7 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
 
       case "pie_chart":
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <PieChart>
               <Pie
                 data={chartData}
@@ -194,7 +194,7 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
 
       case "line_chart":
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
@@ -208,7 +208,7 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
 
       case "scatter_plot":
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <ScatterChart data={chartData}>
               <CartesianGrid />
               <XAxis dataKey="name" />
@@ -221,7 +221,7 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
 
       case "histogram":
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
@@ -241,7 +241,7 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
 
       default:
         return (
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={400}>
             <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="name" />
