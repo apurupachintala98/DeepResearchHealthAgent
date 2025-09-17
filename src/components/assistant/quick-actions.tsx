@@ -99,7 +99,7 @@ export function QuickActions({ compact, onSelectQuestion }: Props) {
                   <Button
                     key={q}
                     variant="outline"
-                    className="w-full h-auto min-h-[2.5rem] whitespace-normal break-words justify-start rounded-xl border border-slate-200 bg-white px-3 py-2 text-left text-sm text-slate-700 shadow-sm hover:bg-slate-50"
+                    className="w-full h-auto min-h-[2.5rem] whitespace-normal break-words justify-start rounded-xl border border-slate-200 bg-white px-3 py-2 text-left text-sm text-slate-700 shadow-sm hover:bg-slate-50 hover:text-[#1447e6]"
                     onClick={() => onSelectQuestion?.(q)}
                     aria-label={q}
                   >
