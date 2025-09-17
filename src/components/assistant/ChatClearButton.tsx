@@ -54,7 +54,7 @@ export default function ChatClearButton({ onClear }: ChatClearButtonProps) {
         }}
         variant="outline"
         size="sm"
-        className="rounded-full border-slate-200 text-slate-600 hover:bg-slate-100 bg-transparent"
+        className="rounded-full border-slate-200 text-slate-600 hover:bg-slate-100 bg-transparent hover:text-[#1447e6]"
       >
         <Trash2 className="mr-2 h-4 w-4" />
         Clear Chat
