@@ -104,7 +104,7 @@ export const App: React.FC = () => {
           })) || [],
         entities: [
           { type: "Diabetes Status", value: analysis.entity_extraction?.diabetics || "Unknown" },
-          { type: "Age", value: String(analysis.entity_extraction?.age ||"unknown") },
+          { type: "Age", value: String(analysis.entity_extraction?.age || "unknown") },
           { type: "Age Group", value: analysis.entity_extraction?.age_group || "Unknown" },
           { type: "Smoking Status", value: analysis.entity_extraction?.smoking || "Unknown" },
           { type: "Alcohol Use", value: analysis.entity_extraction?.alcohol || "Unknown" },
@@ -150,7 +150,7 @@ export const App: React.FC = () => {
         }}
       >
 
-        <h1
+        {/* <h1
           className="text-4xl md:text-3xl font-bold text-slate-900 text-center pt-6"
           style={{
             color: "#6a96fe",
@@ -159,6 +159,84 @@ export const App: React.FC = () => {
           }}
         >
           Deep Research Health Agent 3.0
+        </h1> */}
+        {/* <div className="flex justify-center items-center py-12">
+          <h1
+            className="text-[2.75rem] md:text-[2.25rem] font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500 text-center"
+            style={{
+              textShadow: "0 0 8px rgba(106,150,254,0.3), 2px 2px 6px rgba(0,0,0,0.2)",
+              fontFamily: "ui-sans-serif, system-ui, sans-serif",
+            }}
+          >
+            Deep Research Health Agent 3.0
+          </h1>
+        </div>
+
+
+        <div className="flex justify-center items-center py-16">
+          <h1
+            className="text-[3rem] md:text-[2.5rem] font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-[#0b5ed7] via-[#1181e8] to-[#22c55e] animate-text-glow text-center"
+            style={{
+              fontFamily: "ui-sans-serif, system-ui, sans-serif",
+              textShadow: "0 0 12px rgba(17,129,232,0.4), 2px 2px 8px rgba(0,0,0,0.2)",
+            }}
+          >
+            Deep Research Health Agent 3.0
+          </h1>
+
+          <style jsx>{`
+    @keyframes text-glow {
+      0% {
+        text-shadow: 0 0 12px rgba(17, 129, 232, 0.4), 2px 2px 8px rgba(0, 0, 0, 0.2);
+      }
+      50% {
+        text-shadow: 0 0 20px rgba(17, 129, 232, 0.6), 2px 2px 12px rgba(0, 0, 0, 0.3);
+      }
+      100% {
+        text-shadow: 0 0 12px rgba(17, 129, 232, 0.4), 2px 2px 8px rgba(0, 0, 0, 0.2);
+      }
+    }
+
+    .animate-text-glow {
+      animation: text-glow 3s ease-in-out infinite;
+    }
+  `}</style>
+        </div> */}
+
+        <h1
+          className="text-4xl font-extrabold text-center pt-8 relative bg-gradient-to-r from-blue-900 via-indigo-500 to-sky-300 bg-clip-text text-transparent"
+          style={{
+            fontFamily:
+              'ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+          }}
+        >
+          <span className="shine-text">
+            Deep Research Health Agent 3.0
+          </span>
+
+          <style>
+            {`
+      .shine-text {
+        background-image: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255,255,255,0.9),
+          transparent
+        );
+        background-repeat: no-repeat;
+        background-size: 200% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation: shine 5s ease-in-out infinite;
+        display: inline-block;
+      }
+ 
+      @keyframes shine {
+        0% { background-position: -200% 0; }
+        100% { background-position: 200% 0; }
+      }
+    `}
+          </style>
         </h1>
 
 
@@ -167,7 +245,7 @@ export const App: React.FC = () => {
         </div>
       </main>
 
-      <section className="px-6 py-8" style={{background: "#fff"}}>
+      <section className="px-6 py-8" style={{ background: "#fff" }}>
         {stage === "processing" && <ProgressView isProcessing={isProcessing} onComplete={handleComplete} />}
         {stage === "complete" && result && <ResultsView result={result} onRunAgain={handleRunAgain} />}
       </section>

@@ -280,7 +280,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                 border: activeTab === tab.id ? "1px solid transparent" : "1px solid #f1f5f9", // added very light border for inactive tabs
                 background: activeTab === tab.id ? "#dbeafe" : "white",
                 cursor: "pointer",
-                fontSize: "14px",
+                fontSize: "17px",
                 fontWeight: activeTab === tab.id ? "500" : "400",
                 color: activeTab === tab.id ? "#1e40af" : "#1e40af",
                 transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
