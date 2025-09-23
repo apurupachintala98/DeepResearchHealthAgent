@@ -25,9 +25,9 @@ const CATEGORIES: Category[] = [
     questions: [
       "What diagnoses were found in the medical records?",
       "What medical procedures were performed?",
-      "List all ICD-10 diagnosis codes found.",
-      "When did the patient start taking diabetes medication?",
-      "Are there any unusual prescribing or billing patterns related to this person's records?",
+      "List all ICD-10 diagnosis codes found",
+      "When did patient started taking diabetes medication?",
+      "Are there any unusual prescribing or billing patterns related to this person's records?"
     ],
   },
   {
@@ -35,10 +35,11 @@ const CATEGORIES: Category[] = [
     label: "Medications",
     icon: <Pill className="h-4 w-4 text-blue-600" />,
     questions: [
-      "List current medications and dosages.",
-      "Flag potential drug–drug interactions.",
-      "Summarize medication adherence for the last 90 days.",
-      "Show start and stop dates for each medication.",
+      "What medications is this patient taking?",
+      "What NDC codes were identified?",
+      "Is this person at risk of polypharmacy (taking too many medications or unsafe combinations)?",
+      "How likely is this person to stop taking prescribed medications (medication adherence risk)?",
+      "Is this person likely to switch to higher-cost specialty drugs or need therapy escalation soon?"
     ],
   },
   {
@@ -46,9 +47,11 @@ const CATEGORIES: Category[] = [
     label: "Risk Assessment",
     icon: <ClipboardList className="h-4 w-4 text-blue-600" />,
     questions: [
-      "Identify high‑risk conditions mentioned in the chart.",
-      "Summarize readmission risk factors.",
-      "Calculate 10‑year ASCVD risk if data is available.",
+      "What is the heart attack risk and explain why?",
+      "Based on this person's medical and pharmacy history, is there a risk of developing chronic diseases like diabetes, hypertension, COPD, or chronic kidney disease?",
+      "What is the likelihood that this person will be hospitalized or readmitted in the next 6–12 months?",
+      "Is this person at risk of using the emergency room instead of outpatient care?",
+      "Does this person have a high risk of serious events like stroke, heart attack, or other complications due to comorbidities?"
     ],
   },
   {
@@ -56,9 +59,13 @@ const CATEGORIES: Category[] = [
     label: "Analysis & Graphs",
     icon: <BarChart3 className="h-4 w-4 text-blue-600" />,
     questions: [
-      "Plot blood glucose trend for the last 6 months.",
-      "Show vitals over time with outliers highlighted.",
-      "Compare LDL values year‑over‑year.",
+      "Create a medication timeline chart",
+      "Generate a comprehensive risk dashboard",
+      "Show me a pie chart of medications",
+      "Create a health overview visualization",
+      "Generate a diagnosis timeline chart",
+      "Create a bar chart of medical conditions",
+      "Show medication distribution graph"
     ],
   },
   {
@@ -66,8 +73,11 @@ const CATEGORIES: Category[] = [
     label: "Predictive Analytics",
     icon: <Brain className="h-4 w-4 text-blue-600" />,
     questions: [
-      "Predict risk of hospitalization in the next 30 days.",
-      "Forecast A1C in the next 3 months based on history.",
+      "Predict the patient life expectancy with two scenarios: 1) adhering to the medication 2) non-adhering to the medication",
+      "Can you model how this person's disease might progress over time (for example: diabetes → complications → hospitalizations)?",
+      "Is this person likely to become a high-cost claimant next year?",
+      "Can you estimate this person's future healthcare costs (per month or per year)?",
+      "Based on health data, how should this person be segmented — healthy, rising risk, chronic but stable, or high-cost/critical?"
     ],
   },
   {
@@ -75,8 +85,11 @@ const CATEGORIES: Category[] = [
     label: "Care Management",
     icon: <Stethoscope className="h-4 w-4 text-blue-600" />,
     questions: [
-      "Create a follow‑up checklist for diabetes management.",
-      "Draft patient education for new metformin users.",
+      "What preventive screenings, wellness programs, or lifestyle changes should be recommended as the next best action for this person?",
+      "Does this person have any care gaps, such as missed checkups, cancer screenings, or vaccinations?",
+      "Does this person have any care gaps that could affect quality metrics (like HEDIS or STAR ratings)?",
+      "Is this person more likely to need inpatient hospital care or outpatient care in the future?",
+      "Based on available data, how might this person's long-term health contribute to population-level risk?"
     ],
   },
 ]

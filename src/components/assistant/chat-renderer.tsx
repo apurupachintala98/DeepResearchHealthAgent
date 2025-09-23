@@ -40,9 +40,9 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
   const chartData =
     categories && data
       ? categories.map((category, index) => ({
-          name: category,
-          value: data[index] || 0,
-        }))
+        name: category,
+        value: data[index] || 0,
+      }))
       : []
 
   const renderChart = () => {
@@ -94,10 +94,14 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
         // Horizontal bar chart for health risk percentages
         return (
           <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={chartData} layout="horizontal" margin={{ top: 20, right: 30, left: 80, bottom: 5 }}>
+            <BarChart
+              data={chartData}
+              layout="vertical"
+              margin={{ top: 20, right: 30, left: 80, bottom: 5 }}
+            >
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" domain={[0, 100]} />
-              <YAxis dataKey="name" type="category" width={70} />
+              <YAxis dataKey="name" type="category" width={100} />
               <Tooltip formatter={(value) => [`${value}%`, "Risk Level"]} />
               <Legend />
               <Bar dataKey="value" fill="#FF8042" name="Risk %" />

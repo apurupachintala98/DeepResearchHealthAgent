@@ -1,13 +1,12 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react";
 import Link from "next/link"
 import ClaimsTable from "./ClaimsTable"
-import DiagnosisBarChart from "./DiagnosisBarChart"
 import  { HealthAnalyticsDashboard }  from "../components/Health-analytics-dashboard"
 import { CardiovascularRiskCard } from "../components/Cardiovascular-risk-card"
-import ReactJson from "react-json-view"
+import ReactJson from "react-json-view";
 import { FileText, BarChart3, Search, TrendingUp, Heart } from "lucide-react"
 
 export type ICD10Entry = {
