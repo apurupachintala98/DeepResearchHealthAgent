@@ -1,5 +1,4 @@
 "use client"
-
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
@@ -13,26 +12,23 @@ import AgentService from "@/src/api/AgentService"
 import { ChatResponse as ApiChatResponse } from "@/src/api/AgentService";
 import ChatClearButton from "./ChatClearButton"
 import { ResizablePane } from "../assistant/resizable-panel"
-import {ChartRenderer} from "../assistant/chat-renderer"
+import { ChartRenderer } from "../assistant/chat-renderer"
+import { ChevronRight } from "lucide-react";
 
 type ChatAssistantProps = {
   sessionId?: string
 }
-
 type ChatMessage = {
   role: "user" | "assistant"
   content: string
 }
-
 export type JsonGraphData = {
   categories: string[];
   data: number[];
   graph_type: string;
   title: string;
 };
-
 type ChatResponse = ApiChatResponse;
-
 type GraphData = {
   categories?: string[]
   data?: number[]
@@ -41,24 +37,18 @@ type GraphData = {
   [key: string]: any
 }
 
-
 function parseGraphData(response: string): { cleanResponse: string; graphData: GraphData | null } {
   const graphStartMarker = "***GRAPH_START***"
   const graphEndMarker = "***GRAPH_END***"
-
   const startIndex = response.indexOf(graphStartMarker)
   const endIndex = response.indexOf(graphEndMarker)
-
   if (startIndex === -1 || endIndex === -1) {
     return { cleanResponse: response, graphData: null }
   }
-
   // Extract graph data
   const graphDataString = response.substring(startIndex + graphStartMarker.length, endIndex).trim()
-
   // Remove graph section from response
   const cleanResponse = response.substring(0, startIndex) + response.substring(endIndex + graphEndMarker.length)
-
   try {
     const graphData = JSON.parse(graphDataString)
     return { cleanResponse: cleanResponse.trim(), graphData }
@@ -67,7 +57,6 @@ function parseGraphData(response: string): { cleanResponse: string; graphData: G
     return { cleanResponse: response, graphData: null }
   }
 }
-
 export function ChatAssistant({ sessionId }: ChatAssistantProps) {
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
@@ -77,16 +66,14 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
   const [showGraphPanel, setShowGraphPanel] = useState(false)
   const [currentGraphData, setCurrentGraphData] = useState<GraphData | null>(null)
   const viewportRef = useRef<HTMLDivElement | null>(null)
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const STREAM_TEXT =
     "Here’s a quick demo. I can summarize medical records, list medications, and help with risk assessments."
-
   const streamTimer = useRef<ReturnType<typeof setInterval> | null>(null)
   const streamingMessageId = useRef<string | null>(null)
   const streamIndex = useRef(0)
-
   const getSessionId = () => sessionId || AgentService.getActiveSessionId()
-
   function clearChat() {
     pauseStream()
     setMessages([])
@@ -96,37 +83,30 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
     streamingMessageId.current = null
     streamIndex.current = 0
   }
-
   useEffect(() => {
     return () => {
       if (streamTimer.current) clearInterval(streamTimer.current)
     }
   }, [])
-
   useEffect(() => {
     if (viewportRef.current) {
       viewportRef.current.scrollTop = viewportRef.current.scrollHeight
     }
   }, [messages])
-
   const startStream = () => {
     if (isStreaming) return
     setIsStreaming(true)
-
     if (!streamingMessageId.current) {
       const id = crypto.randomUUID()
       streamingMessageId.current = id
       streamIndex.current = 0
       setMessages((m) => [...m, { id, role: "assistant", text: "" }])
     }
-
     streamTimer.current = setInterval(() => {
       const next = streamIndex.current + 1
       streamIndex.current = next
       const text = STREAM_TEXT.slice(0, next)
-
       setMessages((m) => m.map((msg) => (msg.id === streamingMessageId.current ? { ...msg, text } : msg)))
-
       if (next >= STREAM_TEXT.length) {
         clearInterval(streamTimer.current!)
         streamTimer.current = null
@@ -136,7 +116,6 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
       }
     }, 28)
   }
-
   const pauseStream = () => {
     if (streamTimer.current) {
       clearInterval(streamTimer.current)
@@ -144,7 +123,6 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
     }
     setIsStreaming(false)
   }
-
   const send = async () => {
     pauseStream()
     const text = input.trim()
@@ -160,31 +138,24 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
       ])
       return
     }
-
     const userMessage: Message = {
       id: crypto.randomUUID(),
       role: "user",
       text,
     }
-
     const newChatEntry: ChatMessage = { role: "user", content: text }
-
     setMessages((m) => [...m, userMessage])
     setChatHistory((h) => [...h, newChatEntry])
     setInput("")
     setLoading(true)
-
     try {
       const response: ChatResponse = await AgentService.sendChatMessage({
         sessionId: sid,
         question: text,
         chatHistory: [...chatHistory, newChatEntry],
       })
-
       console.log(response);
-
       const { cleanResponse, graphData } = parseGraphData(response.response || "No response received.")
-
       // Check if graph is present in the API response
       if (response.graph_present === 1 && (graphData || response.json_graph_data)) {
         const finalGraphData = graphData || response.json_graph_data || null
@@ -199,7 +170,6 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
         role: "assistant",
         text: cleanResponse,
       }
-
       setMessages((m) => [...m, assistantMessage])
       setChatHistory((h) => [...h, { role: "assistant", content: assistantMessage.text }])
     } catch (error) {
@@ -215,33 +185,26 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
       setLoading(false)
     }
   }
-
   function handleSelectQuestion(question: string) {
     pauseStream()
     const sid = getSessionId()
     if (!sid) return
-
     const userMessage: Message = {
       id: crypto.randomUUID(),
       role: "user",
       text: question,
     }
-
     const newChatEntry: ChatMessage = { role: "user", content: question }
-
     setMessages((m) => [...m, userMessage])
     setChatHistory((h) => [...h, newChatEntry])
     setLoading(true)
-
     AgentService.sendChatMessage({
       sessionId: sid,
       question,
       chatHistory: [...chatHistory, newChatEntry],
     })
-
       .then((response: ChatResponse) => {
         const { cleanResponse, graphData } = parseGraphData(response.response || "No response received.")
-
         console.log(response);
         // Check if graph is present in the API response
         if (response.graph_present === 1 && (graphData || response.json_graph_data)) {
@@ -249,13 +212,11 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
           setCurrentGraphData(finalGraphData)
           setShowGraphPanel(true)
         }
-
         const assistantMessage: Message = {
           id: crypto.randomUUID(),
           role: "assistant",
           text: cleanResponse,
         }
-
         setMessages((m) => [...m, assistantMessage])
         setChatHistory((h) => [...h, { role: "assistant", content: assistantMessage.text }])
       })
@@ -273,10 +234,24 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
         setLoading(false)
       })
   }
-
   return (
-     <>
+    <>
       <div className="h-screen flex flex-col">
+        {/* ✅ Always show expand button when sidebar is collapsed */}
+        {isSidebarCollapsed && (
+          <div className="fixed left-0 top-1/2 z-50 -translate-y-1/2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsSidebarCollapsed(false)}
+              aria-label="Expand Quick Questions"
+              className="rounded-r-full bg-white shadow-md ring-1 ring-slate-100"
+            >
+              <ChevronLeft className="h-4 w-4 text-slate-800" />
+            </Button>
+          </div>
+        )}
+
         <div className="flex-1 overflow-hidden">
           {showGraphPanel && currentGraphData ? (
             <ResizablePane defaultSize={60} minSize={30} maxSize={80}>
@@ -284,19 +259,37 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
               <div className="h-full flex flex-col">
                 <div className="flex w-full gap-6 p-4 md:p-6 h-full">
                   {/* Sidebar */}
-                  <aside className="hidden w-80 min-w-80 max-w-80 shrink-0 overflow-x-hidden self-start md:block">
-                    <Card className="rounded-3xl bg-white p-4 shadow-md ring-1 ring-slate-100">
-                      <h3 className="mb-3 text-base font-semibold text-slate-800">Quick Questions</h3>
-                      <QuickActions onSelectQuestion={handleSelectQuestion} />
-                      <div className="mt-4">
-                        <Link href="/" className="block">
-                          <Button className="w-full rounded-full bg-blue-600 text-white hover:bg-blue-700">
-                            Back to Main Page
+                  {!isSidebarCollapsed && (
+                    <aside className="w-80 min-w-80 max-w-80 shrink-0 h-full md:block transition-all duration-300">
+                      <Card className="h-full rounded-3xl bg-white shadow-md ring-1 ring-slate-100 flex flex-col">
+                        {/* Header with collapse button */}
+                        <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+                          <h3 className="text-base font-semibold text-slate-800">Quick Questions</h3>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setIsSidebarCollapsed(true)}
+                            aria-label="Collapse Quick Questions"
+                          >
+                            <ChevronRight className="h-4 w-4" />
                           </Button>
-                        </Link>
-                      </div>
-                    </Card>
-                  </aside>
+                        </div>
+
+                        {/* Scrollable QuickActions */}
+                        <div className="flex-1 overflow-y-auto px-4 pb-4">
+                          <QuickActions onSelectQuestion={handleSelectQuestion} />
+                          <div className="mt-4">
+                            <Link href="/" className="block">
+                              <Button className="w-full rounded-full bg-blue-600 text-white hover:bg-blue-700">
+                                Back to Main Page
+                              </Button>
+                            </Link>
+                          </div>
+                        </div>
+                      </Card>
+                    </aside>
+                  )}
+
 
                   {/* Chat Panel */}
                   <section className="flex-1 rounded-3xl bg-white p-3 shadow-md ring-1 ring-slate-100 md:p-4 flex flex-col h-full">
@@ -314,7 +307,6 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                         <Menu className="h-5 w-5" />
                       </button>
                     </header>
-
                     {/* Welcome strip */}
                     <div className="mt-3 flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-2 ring-1 ring-slate-100">
                       <p className="text-sm text-slate-700">
@@ -355,7 +347,6 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                         </Button>
                       </div>
                     </div>
-
                     {/* Messages */}
                     <Card className="mt-3 rounded-2xl border-none p-2 shadow-none flex-1 overflow-hidden">
                       <ScrollArea className="h-full" viewportRef={viewportRef}>
@@ -363,7 +354,7 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                           {messages.map((m) => (
                             <MessageItem key={m.id} role={m.role} text={m.text} id={""} />
                           ))}
-                           {loading && (
+                          {loading && (
                             <div className="flex items-center justify-center p-4">
                               <div className="flex items-center gap-3 rounded-lg bg-slate-50 px-4 py-3 ring-1 ring-slate-200">
                                 <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
@@ -374,10 +365,8 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                         </div>
                       </ScrollArea>
                     </Card>
-
                     {/* Clear Chat Button */}
                     <ChatClearButton onClear={clearChat} />
-
                     {/* Composer */}
                     <div className="mt-3 flex items-center gap-2 rounded-full bg-white p-1 pl-3 ring-1 ring-slate-200">
                       <button aria-label="Voice input" className="rounded-full p-2 text-slate-600 hover:bg-slate-100">
@@ -405,7 +394,6 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                         Send
                       </Button>
                     </div>
-
                     {/* Mobile quick actions */}
                     <div className="mt-4 block md:hidden">
                       <Card className="rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-100">
@@ -416,7 +404,6 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                   </section>
                 </div>
               </div>
-
               {/* Chart Panel */}
               <div className="h-full bg-white border-l border-slate-200">
                 <div className="flex items-center justify-between p-4 border-b border-slate-200">
@@ -431,21 +418,53 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
               </div>
             </ResizablePane>
           ) : (
-            <div className="flex w-full gap-6 p-4 md:p-6 h-full">
-              {/* Sidebar */}
-              <aside className="hidden w-80 min-w-80 max-w-80 shrink-0 overflow-x-hidden self-start md:block">
-                <Card className="rounded-3xl bg-white p-4 shadow-md ring-1 ring-slate-100">
-                  <h3 className="mb-3 text-base font-semibold text-slate-800">Quick Questions</h3>
-                  <QuickActions onSelectQuestion={handleSelectQuestion} />
-                  <div className="mt-4">
-                    <Link href="/" className="block">
-                      <Button className="w-full rounded-full bg-blue-600 text-white hover:bg-blue-700">
-                        Back to Main Page
+
+
+            <div className="flex w-full h-full p-4 md:p-6 gap-6">
+
+
+              {isSidebarCollapsed ? (
+                <div className="fixed left-0 top-1/2 z-50 -translate-y-1/2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setIsSidebarCollapsed(false)}
+                    aria-label="Expand Quick Questions"
+                    className="rounded-r-full bg-white shadow-md ring-1 ring-slate-100"
+                  >
+                    <ChevronLeft className="h-4 w-4 text-slate-800" />
+                  </Button>
+                </div>
+              ) : (
+                <aside className="w-80 min-w-80 max-w-80 shrink-0 h-full md:block transition-all duration-300">
+                  <Card className="h-full rounded-3xl bg-white shadow-md ring-1 ring-slate-100 flex flex-col">
+                    {/* Header with collapse button */}
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+                      <h3 className="text-base font-semibold text-slate-800">Quick Questions</h3>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setIsSidebarCollapsed(true)}
+                        aria-label="Collapse Quick Questions"
+                      >
+                        <ChevronRight className="h-4 w-4" />
                       </Button>
-                    </Link>
-                  </div>
-                </Card>
-              </aside>
+                    </div>
+
+                    {/* Scrollable QuickActions */}
+                    <div className="flex-1 overflow-y-auto px-4 pb-4">
+                      <QuickActions onSelectQuestion={handleSelectQuestion} />
+                      <div className="mt-4">
+                        <Link href="/" className="block">
+                          <Button className="w-full rounded-full bg-blue-600 text-white hover:bg-blue-700">
+                            Back to Main Page
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  </Card>
+                </aside>
+              )}
 
               {/* Chat Panel */}
               <section className="flex-1 rounded-3xl bg-white p-3 shadow-md ring-1 ring-slate-100 md:p-4 flex flex-col h-full">
@@ -461,6 +480,7 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                     <Menu className="h-5 w-5" />
                   </button>
                 </header>
+
 
                 {/* Welcome strip */}
                 <div className="mt-3 flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-2 ring-1 ring-slate-100">
@@ -502,7 +522,6 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                     </Button>
                   </div>
                 </div>
-
                 {/* Messages */}
                 <Card className="mt-3 rounded-2xl border-none p-2 shadow-none flex-1 overflow-hidden">
                   <ScrollArea className="h-[48vh] md:h-[56vh]" viewportRef={viewportRef}>
@@ -510,7 +529,7 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                       {messages.map((m) => (
                         <MessageItem key={m.id} role={m.role} text={m.text} id={""} />
                       ))}
-                       {loading && (
+                      {loading && (
                         <div className="flex items-center justify-center p-4">
                           <div className="flex items-center gap-3 rounded-lg bg-slate-50 px-4 py-3 ring-1 ring-slate-200">
                             <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
@@ -521,10 +540,8 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                     </div>
                   </ScrollArea>
                 </Card>
-
                 {/* Clear Chat Button */}
                 <ChatClearButton onClear={clearChat} />
-
                 {/* Composer */}
                 <div className="mt-3 flex items-center gap-2 rounded-full bg-white p-1 pl-3 ring-1 ring-slate-200">
                   <button aria-label="Voice input" className="rounded-full p-2 text-slate-600 hover:bg-slate-100">
@@ -552,7 +569,6 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
                     Send
                   </Button>
                 </div>
-
                 {/* Mobile quick actions */}
                 <div className="mt-4 block md:hidden">
                   <Card className="rounded-2xl bg-slate-50 p-3 ring-1 ring-slate-100">
@@ -564,9 +580,7 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
             </div>
           )}
         </div>
-      </div>
+      </div >
     </>
   )
 }
-
-

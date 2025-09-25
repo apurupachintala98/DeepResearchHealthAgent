@@ -6,6 +6,9 @@ interface MarkdownRendererProps {
   content: string
 }
 
+let listBlockCounter = 0
+
+
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
   const renderMarkdown = (text: string) => {
     // Split by lines for processing
@@ -14,12 +17,37 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     let currentList: string[] = []
     let listType: "ul" | "ol" | null = null
 
+    // const flushList = () => {
+    //   if (currentList.length > 0 && listType) {
+    //     const ListComponent = listType === "ul" ? "ul" : "ol"
+    //     elements.push(
+    //       <ListComponent
+    //         key={elements.length}
+    //         className={
+    //           listType === "ul"
+    //             ? "ml-4 mb-4 space-y-1 list-disc list-inside"
+    //             : "ml-4 mb-4 space-y-1 list-decimal list-inside"
+    //         }
+    //       >
+    //         {currentList.map((item, idx) => (
+    //           <li key={idx} className="text-slate-700 leading-relaxed">
+    //             {processInlineMarkdown(item)}
+    //           </li>
+    //         ))}
+    //       </ListComponent>,
+    //     )
+    //     currentList = []
+    //     listType = null
+    //   }
+    // }
     const flushList = () => {
       if (currentList.length > 0 && listType) {
         const ListComponent = listType === "ul" ? "ul" : "ol"
+        listBlockCounter += 1
+    
         elements.push(
           <ListComponent
-            key={elements.length}
+            key={`list-${listBlockCounter}`}
             className={
               listType === "ul"
                 ? "ml-4 mb-4 space-y-1 list-disc list-inside"
@@ -37,6 +65,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         listType = null
       }
     }
+    
 
     const processInlineMarkdown = (text: string) => {
       // Process bold text

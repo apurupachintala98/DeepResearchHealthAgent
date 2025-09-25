@@ -128,6 +128,15 @@ const getStatusIcon = (status: string) => {
     }
 }
 
+const pastelColors = [
+    { bg: "#f5f3f7", border: "#e6dff2", text: "#5b3e77" }, // Pale Lilac (replaces Misty Gray)
+    { bg: "#f0f4f8", border: "#cbd5e1", text: "#334155" }, // Cloud Blue
+    { bg: "#fef6f9", border: "#fcdde8", text: "#7f1d1d" }, // Blush Rose
+    { bg: "#f5fdfb", border: "#d1fae5", text: "#065f46" }, // Aloe Mint
+    { bg: "#fdfcf5", border: "#fef3c7", text: "#92400e" }, // Butter Cream
+    { bg: "#f8f7ff", border: "#e0e7ff", text: "#4338ca" }, // Lavender Fog
+  ]
+  
 export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardProps) {
     const healthMetrics = transformApiDataToMetrics(result.entities);
 
@@ -186,7 +195,7 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
 
             {/* Metrics Grid */}
             <div className="health-section">
-                {healthMetrics.map((metric) => (
+                {/* {healthMetrics.map((metric) => (
                     <Card
                         key={metric.id}
                         className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-400 hover:border-gray-300 bg-card/50 backdrop-blur-sm min-w-0"
@@ -228,7 +237,62 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
                             </div>
                         </CardContent>
                     </Card>
-                ))}
+                ))} */}
+                {healthMetrics.map((metric, index) => {
+                    const color = pastelColors[index % pastelColors.length]
+
+                    return (
+                        <Card
+                            key={metric.id}
+                            className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border min-w-0"
+                            style={{
+                                backgroundColor: color.bg,
+                                borderColor: color.border,
+                                color: color.text,
+                            }}
+                        >
+                            <CardHeader className="pb-2 px-3 pt-3" style={{ display: "grid", gridTemplateColumns: "none" }}>
+                                <div className="flex items-center justify-between">
+                                    <div className="p-1.5 rounded-lg" style={{ backgroundColor: color.border, color: color.text }}>
+                                        {metric.icon}
+                                    </div>
+                                    {getStatusIcon(metric.status) && (
+                                        <div className="p-1 rounded-full" style={{ backgroundColor: color.border }}>
+                                            {getStatusIcon(metric.status)}
+                                        </div>
+                                    )}
+                                </div>
+                                <CardTitle className="text-sm font-semibold truncate" style={{ color: color.text }}>
+                                    {metric.label}
+                                </CardTitle>
+                            </CardHeader>
+
+                            <CardContent className="pt-0 px-3 pb-3">
+                                <div className="space-y-2">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-lg font-bold truncate">{metric.value}</span>
+                                        {metric.trend !== undefined && (
+                                            <Badge
+                                                variant="outline"
+                                                className={`text-xs ${metric.trend > 0 ? "text-chart-1" : metric.trend < 0 ? "text-chart-3" : "text-muted-foreground"}`}
+                                            >
+                                                {metric.trend > 0 ? "+" : ""}
+                                                {metric.trend}%
+                                            </Badge>
+                                        )}
+                                    </div>
+
+                                    <p className="text-xs leading-relaxed line-clamp-2" style={{ color: "#374151" }}>
+                                        {metric.description}
+                                    </p>
+
+                                    {metric.status === "warning" && <Progress value={75} className="h-1" />}
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )
+                })}
+
             </div>
         </div>
     )
