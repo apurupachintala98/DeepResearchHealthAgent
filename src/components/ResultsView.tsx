@@ -6,7 +6,8 @@ import Link from "next/link"
 import ClaimsTable from "./ClaimsTable"
 import  { HealthAnalyticsDashboard }  from "../components/Health-analytics-dashboard"
 import { CardiovascularRiskCard } from "../components/Cardiovascular-risk-card"
-import ReactJson from "react-json-view";
+// import ReactJson from "react-json-view";
+import dynamic from "next/dynamic";
 import { FileText, BarChart3, Search, TrendingUp, Heart } from "lucide-react"
 
 export type ICD10Entry = {
@@ -94,6 +95,10 @@ type Props = {
   result: AnalysisResult
   onRunAgain: () => void
 }
+
+const ReactJson = dynamic(() => import("react-json-view"), {
+  ssr: false,
+});
 
 
 function formatDetails(text: string) {
@@ -626,3 +631,5 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
     </section>
   )
 }
+
+

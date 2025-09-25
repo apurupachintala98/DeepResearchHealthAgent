@@ -1,3 +1,21 @@
+// /** @type {import('next').NextConfig} */
+// const nextConfig = {
+//   eslint: {
+//     ignoreDuringBuilds: true,
+//   },
+//   typescript: {
+//     ignoreBuildErrors: true,
+//   },
+//   images: {
+//     unoptimized: true,
+//   },
+//   devIndicators: {
+//     buildActivity: false,
+//     buildActivityPosition: 'bottom-right',
+//   },
+// }
+
+// export default nextConfig
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   eslint: {
@@ -10,9 +28,8 @@ const nextConfig = {
     unoptimized: true,
   },
   devIndicators: {
-    buildActivity: false,
-    buildActivityPosition: 'bottom-right',
+    position: 'bottom-right', //  Corrected
   },
 }
 
-export default nextConfig
+export default nextConfig;
