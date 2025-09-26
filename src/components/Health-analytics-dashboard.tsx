@@ -181,11 +181,11 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                             <div className="flex items-center gap-2">
                                 <TrendingUp className="h-4 w-4 text-chart-1" />
-                                <span className="text-sm font-medium">Real-time Analysis</span>
+                                <span className="text-base font-semibold">Real-time Analysis</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <Shield className="h-4 w-4 text-chart-1" />
-                                <span className="text-sm font-medium">HIPAA Compliant</span>
+                                <span className="text-base font-semibold">HIPAA Compliant</span>
                             </div>
                         </div>
                     </div>
@@ -262,7 +262,7 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
                                         </div>
                                     )}
                                 </div>
-                                <CardTitle className="text-sm font-semibold truncate" style={{ color: color.text }}>
+                                <CardTitle className="text-base font-bold truncate" style={{ color: color.text }}>
                                     {metric.label}
                                 </CardTitle>
                             </CardHeader>

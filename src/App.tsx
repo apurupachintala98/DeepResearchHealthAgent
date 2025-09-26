@@ -61,9 +61,25 @@ export const App: React.FC = () => {
       const analysis = apiResponse.data.analysis_results;
 
       const transformedResult: AnalysisResult = {
-        claimsData: analysis.api_outputs.medical.body.MEDICAL_CLAIMS || [],
-        claimsAnalysis: analysis.structured_extractions?.medical?.hlth_srvc_records || [],
-        mcidClaims: [analysis.api_outputs.mcid.body || {}],
+        
+        claimsData: analysis.deidentified_data.medical || [],
+        claimsAnalysis: analysis.deidentified_data?.pharmacy || [],
+        mcidClaims: [analysis.deidentified_data.mcid || {}],
+
+        extractionSummary: {
+          totalHealthServiceRecords: analysis.structured_extractions?.medical?.extraction_summary?.total_hlth_srvc_records || 0,
+          totalDiagnosisCodes: analysis.structured_extractions?.medical?.extraction_summary?.total_diagnosis_codes || 0,
+          uniqueServiceCodeCount: analysis.structured_extractions?.medical?.extraction_summary?.unique_service_codes?.length || 0,
+          uniqueDiagnosisCodeCount: analysis.structured_extractions?.medical?.extraction_summary?.unique_diagnosis_codes?.length || 0,
+        },
+
+        pharmacySummary: {
+          totalNdcRecords: analysis.structured_extractions?.pharmacy?.extraction_summary?.total_ndc_records || 0,
+          uniqueNdcCodeCount: analysis.structured_extractions?.pharmacy?.extraction_summary?.unique_ndc_codes?.length || 0,
+          uniqueLabelNameCount: analysis.structured_extractions?.pharmacy?.extraction_summary?.unique_label_names?.length || 0,
+        },
+        
+
         icd10Data:
           analysis.structured_extractions?.medical?.hlth_srvc_records?.flatMap((record: any) =>
             record.diagnosis_codes?.map((code: any) => ({
