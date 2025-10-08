@@ -14,6 +14,7 @@ import ChatClearButton from "./ChatClearButton"
 import { ResizablePane } from "../assistant/resizable-panel"
 import { ChartRenderer } from "../assistant/chat-renderer"
 import { ChevronRight } from "lucide-react";
+import { v4 as uuidv4 } from 'uuid';
 
 type ChatAssistantProps = {
   sessionId?: string
@@ -93,147 +94,308 @@ export function ChatAssistant({ sessionId }: ChatAssistantProps) {
       viewportRef.current.scrollTop = viewportRef.current.scrollHeight
     }
   }, [messages])
+  // const startStream = () => {
+  //   if (isStreaming) return
+  //   setIsStreaming(true)
+  //   if (!streamingMessageId.current) {
+  //     const id = crypto.randomUUID()
+  //     streamingMessageId.current = id
+  //     streamIndex.current = 0
+  //     setMessages((m) => [...m, { id, role: "assistant", text: "" }])
+  //   }
+  //   streamTimer.current = setInterval(() => {
+  //     const next = streamIndex.current + 1
+  //     streamIndex.current = next
+  //     const text = STREAM_TEXT.slice(0, next)
+  //     setMessages((m) => m.map((msg) => (msg.id === streamingMessageId.current ? { ...msg, text } : msg)))
+  //     if (next >= STREAM_TEXT.length) {
+  //       clearInterval(streamTimer.current!)
+  //       streamTimer.current = null
+  //       setIsStreaming(false)
+  //       streamingMessageId.current = null
+  //       streamIndex.current = 0
+  //     }
+  //   }, 28)
+  // }
+  // const pauseStream = () => {
+  //   if (streamTimer.current) {
+  //     clearInterval(streamTimer.current)
+  //     streamTimer.current = null
+  //   }
+  //   setIsStreaming(false)
+  // }
+  // const send = async () => {
+  //   pauseStream()
+  //   const text = input.trim()
+  //   const sid = getSessionId()
+  //   if (!text || !sid) {
+  //     setMessages((m) => [
+  //       ...m,
+  //       {
+  //         id: crypto.randomUUID(),
+  //         role: "assistant",
+  //         text: "Session ID is missing. Please run analysis first.",
+  //       },
+  //     ])
+  //     return
+  //   }
+  //   const userMessage: Message = {
+  //     id: crypto.randomUUID(),
+  //     role: "user",
+  //     text,
+  //   }
+  //   const newChatEntry: ChatMessage = { role: "user", content: text }
+  //   setMessages((m) => [...m, userMessage])
+  //   setChatHistory((h) => [...h, newChatEntry])
+  //   setInput("")
+  //   setLoading(true)
+  //   try {
+  //     const response: ChatResponse = await AgentService.sendChatMessage({
+  //       sessionId: sid,
+  //       question: text,
+  //       chatHistory: [...chatHistory, newChatEntry],
+  //     })
+  //     console.log(response);
+  //     const { cleanResponse, graphData } = parseGraphData(response.response || "No response received.")
+  //     // Check if graph is present in the API response
+  //     if (response.graph_present === 1 && (graphData || response.json_graph_data)) {
+  //       const finalGraphData = graphData || response.json_graph_data || null
+  //       setCurrentGraphData(finalGraphData)
+  //       setShowGraphPanel(true)
+  //     }
+  //     console.log(response);
+  //     console.log(cleanResponse);
+  //     console.log(graphData);
+  //     const assistantMessage: Message = {
+  //       id: crypto.randomUUID(),
+  //       role: "assistant",
+  //       text: cleanResponse,
+  //     }
+  //     setMessages((m) => [...m, assistantMessage])
+  //     setChatHistory((h) => [...h, { role: "assistant", content: assistantMessage.text }])
+  //   } catch (error) {
+  //     setMessages((m) => [
+  //       ...m,
+  //       {
+  //         id: crypto.randomUUID(),
+  //         role: "assistant",
+  //         text: "Something went wrong. Please try again.",
+  //       },
+  //     ])
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
+  // function handleSelectQuestion(question: string) {
+  //   pauseStream()
+  //   const sid = getSessionId()
+  //   if (!sid) return
+  //   const userMessage: Message = {
+  //     id: crypto.randomUUID(),
+  //     role: "user",
+  //     text: question,
+  //   }
+  //   const newChatEntry: ChatMessage = { role: "user", content: question }
+  //   setMessages((m) => [...m, userMessage])
+  //   setChatHistory((h) => [...h, newChatEntry])
+  //   setLoading(true)
+  //   AgentService.sendChatMessage({
+  //     sessionId: sid,
+  //     question,
+  //     chatHistory: [...chatHistory, newChatEntry],
+  //   })
+  //     .then((response: ChatResponse) => {
+  //       const { cleanResponse, graphData } = parseGraphData(response.response || "No response received.")
+  //       console.log(response);
+  //       // Check if graph is present in the API response
+  //       if (response.graph_present === 1 && (graphData || response.json_graph_data)) {
+  //         const finalGraphData = graphData || response.json_graph_data || null
+  //         setCurrentGraphData(finalGraphData)
+  //         setShowGraphPanel(true)
+  //       }
+  //       const assistantMessage: Message = {
+  //         id: crypto.randomUUID(),
+  //         role: "assistant",
+  //         text: cleanResponse,
+  //       }
+  //       setMessages((m) => [...m, assistantMessage])
+  //       setChatHistory((h) => [...h, { role: "assistant", content: assistantMessage.text }])
+  //     })
+  //     .catch(() => {
+  //       setMessages((m) => [
+  //         ...m,
+  //         {
+  //           id: crypto.randomUUID(),
+  //           role: "assistant",
+  //           text: "Something went wrong. Please try again.",
+  //         },
+  //       ])
+  //     })
+  //     .finally(() => {
+  //       setLoading(false)
+  //     })
+  // }
   const startStream = () => {
-    if (isStreaming) return
-    setIsStreaming(true)
+    if (isStreaming) return;
+    setIsStreaming(true);
     if (!streamingMessageId.current) {
-      const id = crypto.randomUUID()
-      streamingMessageId.current = id
-      streamIndex.current = 0
-      setMessages((m) => [...m, { id, role: "assistant", text: "" }])
+      const id = uuidv4();
+      streamingMessageId.current = id;
+      streamIndex.current = 0;
+      setMessages((m) => [...m, { id, role: "assistant", text: "" }]);
     }
     streamTimer.current = setInterval(() => {
-      const next = streamIndex.current + 1
-      streamIndex.current = next
-      const text = STREAM_TEXT.slice(0, next)
-      setMessages((m) => m.map((msg) => (msg.id === streamingMessageId.current ? { ...msg, text } : msg)))
+      const next = streamIndex.current + 1;
+      streamIndex.current = next;
+      const text = STREAM_TEXT.slice(0, next);
+      setMessages((m) =>
+        m.map((msg) =>
+          msg.id === streamingMessageId.current ? { ...msg, text } : msg
+        )
+      );
       if (next >= STREAM_TEXT.length) {
-        clearInterval(streamTimer.current!)
-        streamTimer.current = null
-        setIsStreaming(false)
-        streamingMessageId.current = null
-        streamIndex.current = 0
+        clearInterval(streamTimer.current!);
+        streamTimer.current = null;
+        setIsStreaming(false);
+        streamingMessageId.current = null;
+        streamIndex.current = 0;
       }
-    }, 28)
-  }
+    }, 28);
+  };
+  
   const pauseStream = () => {
     if (streamTimer.current) {
-      clearInterval(streamTimer.current)
-      streamTimer.current = null
+      clearInterval(streamTimer.current);
+      streamTimer.current = null;
     }
-    setIsStreaming(false)
-  }
+    setIsStreaming(false);
+  };
+  
   const send = async () => {
-    pauseStream()
-    const text = input.trim()
-    const sid = getSessionId()
+    pauseStream();
+    const text = input.trim();
+    const sid = getSessionId();
     if (!text || !sid) {
       setMessages((m) => [
         ...m,
         {
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           role: "assistant",
           text: "Session ID is missing. Please run analysis first.",
         },
-      ])
-      return
+      ]);
+      return;
     }
+  
     const userMessage: Message = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       role: "user",
       text,
-    }
-    const newChatEntry: ChatMessage = { role: "user", content: text }
-    setMessages((m) => [...m, userMessage])
-    setChatHistory((h) => [...h, newChatEntry])
-    setInput("")
-    setLoading(true)
+    };
+    const newChatEntry: ChatMessage = { role: "user", content: text };
+    setMessages((m) => [...m, userMessage]);
+    setChatHistory((h) => [...h, newChatEntry]);
+    setInput("");
+    setLoading(true);
+  
     try {
       const response: ChatResponse = await AgentService.sendChatMessage({
         sessionId: sid,
         question: text,
         chatHistory: [...chatHistory, newChatEntry],
-      })
-      console.log(response);
-      const { cleanResponse, graphData } = parseGraphData(response.response || "No response received.")
-      // Check if graph is present in the API response
+      });
+  
+      const { cleanResponse, graphData } = parseGraphData(
+        response.response || "No response received."
+      );
+  
       if (response.graph_present === 1 && (graphData || response.json_graph_data)) {
-        const finalGraphData = graphData || response.json_graph_data || null
-        setCurrentGraphData(finalGraphData)
-        setShowGraphPanel(true)
+        const finalGraphData = graphData || response.json_graph_data || null;
+        setCurrentGraphData(finalGraphData);
+        setShowGraphPanel(true);
       }
-      console.log(response);
-      console.log(cleanResponse);
-      console.log(graphData);
+  
       const assistantMessage: Message = {
-        id: crypto.randomUUID(),
+        id: uuidv4(),
         role: "assistant",
         text: cleanResponse,
-      }
-      setMessages((m) => [...m, assistantMessage])
-      setChatHistory((h) => [...h, { role: "assistant", content: assistantMessage.text }])
+      };
+      setMessages((m) => [...m, assistantMessage]);
+      setChatHistory((h) => [
+        ...h,
+        { role: "assistant", content: assistantMessage.text },
+      ]);
     } catch (error) {
       setMessages((m) => [
         ...m,
         {
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           role: "assistant",
           text: "Something went wrong. Please try again.",
         },
-      ])
+      ]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
+  
   function handleSelectQuestion(question: string) {
-    pauseStream()
-    const sid = getSessionId()
-    if (!sid) return
+    pauseStream();
+    const sid = getSessionId();
+    if (!sid) return;
+  
     const userMessage: Message = {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       role: "user",
       text: question,
-    }
-    const newChatEntry: ChatMessage = { role: "user", content: question }
-    setMessages((m) => [...m, userMessage])
-    setChatHistory((h) => [...h, newChatEntry])
-    setLoading(true)
+    };
+    const newChatEntry: ChatMessage = { role: "user", content: question };
+    setMessages((m) => [...m, userMessage]);
+    setChatHistory((h) => [...h, newChatEntry]);
+    setLoading(true);
+  
     AgentService.sendChatMessage({
       sessionId: sid,
       question,
       chatHistory: [...chatHistory, newChatEntry],
     })
       .then((response: ChatResponse) => {
-        const { cleanResponse, graphData } = parseGraphData(response.response || "No response received.")
-        console.log(response);
-        // Check if graph is present in the API response
+        const { cleanResponse, graphData } = parseGraphData(
+          response.response || "No response received."
+        );
+  
         if (response.graph_present === 1 && (graphData || response.json_graph_data)) {
-          const finalGraphData = graphData || response.json_graph_data || null
-          setCurrentGraphData(finalGraphData)
-          setShowGraphPanel(true)
+          const finalGraphData = graphData || response.json_graph_data || null;
+          setCurrentGraphData(finalGraphData);
+          setShowGraphPanel(true);
         }
+  
         const assistantMessage: Message = {
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           role: "assistant",
           text: cleanResponse,
-        }
-        setMessages((m) => [...m, assistantMessage])
-        setChatHistory((h) => [...h, { role: "assistant", content: assistantMessage.text }])
+        };
+        setMessages((m) => [...m, assistantMessage]);
+        setChatHistory((h) => [
+          ...h,
+          { role: "assistant", content: assistantMessage.text },
+        ]);
       })
       .catch(() => {
         setMessages((m) => [
           ...m,
           {
-            id: crypto.randomUUID(),
+            id: uuidv4(),
             role: "assistant",
             text: "Something went wrong. Please try again.",
           },
-        ])
+        ]);
       })
       .finally(() => {
-        setLoading(false)
-      })
+        setLoading(false);
+      });
   }
+  
   return (
     <>
       <div className="h-screen flex flex-col">

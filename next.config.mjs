@@ -27,9 +27,10 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
-  devIndicators: {
-    position: 'bottom-right', //  Corrected
-  },
+  // devIndicators: {
+  //   position: 'bottom-right', //  Corrected
+  // },
+  devIndicators: false,
 }
 
 export default nextConfig;

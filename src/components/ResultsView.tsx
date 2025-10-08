@@ -217,8 +217,8 @@
 //     result.deidentified_data?.pharmacy || {},
 //     result.deidentified_data?.mcid || {}
 //   ]
-  
-  
+
+
 //   const jsonString = JSON.stringify(tabData[selectedTab], null, 2)
 
 //   const medicalSummary = [
@@ -656,7 +656,7 @@ import type React from "react"
 import { useState, useEffect } from "react";
 import Link from "next/link"
 import ClaimsTable from "./ClaimsTable"
-import  { HealthAnalyticsDashboard }  from "../components/Health-analytics-dashboard"
+import { HealthAnalyticsDashboard } from "../components/Health-analytics-dashboard"
 import { CardiovascularRiskCard } from "../components/Cardiovascular-risk-card"
 // import ReactJson from "react-json-view";
 import dynamic from "next/dynamic";
@@ -674,24 +674,25 @@ export type ICD10Entry = {
 }
 
 export type ServiceCodeEntry = {
-  code: string
-  meaning: string
+  serviceCode: string
+  serviceDescription: string
   date: string
-  provider: string
-  zip: string
-  position: number
-  source: string
   path: string
 }
 
 export type NDCEntry = {
+  // code: string
+  // meaning: string
+  // date: string
+  // provider: string
+  // zip: string
+  // position: number
+  // source: string
+  // path: string
   code: string
-  meaning: string
+  medication: string
   date: string
-  provider: string
-  zip: string
-  position: number
-  source: string
+  description: string
   path: string
 }
 
@@ -703,10 +704,15 @@ export type MedicationEntry = {
   zip: string
   position: number
   source: string
+  // path: string
+  ndcCode: string
+  medication: string
+  fillDate: string
+  description: string
+  billingProvider: string
+  prescribingProvider: string
   path: string
 }
-
-
 
 // export type AnalysisResult = {
 //   claimsData: string[]
@@ -743,20 +749,31 @@ export type AnalysisResult = {
     medical_conditions?: string[]
   }
 
+  // extractionSummary?: {
+  //   totalHealthServiceRecords: number
+  //   totalDiagnosisCodes: number
+  //   uniqueServiceCodeCount: number
+  //   uniqueDiagnosisCodeCount: number
+  // }
+
+  // pharmacySummary?: {
+  //   totalNdcRecords: number
+  //   uniqueNdcCodeCount: number
+  //   uniqueLabelNameCount: number
+  // }
   extractionSummary?: {
-    totalHealthServiceRecords: number
-    totalDiagnosisCodes: number
-    uniqueServiceCodeCount: number
-    uniqueDiagnosisCodeCount: number
+    serviceCodeCount: number         // → "Service Codes"
+    ICD10CodeCount: number           // → "ICD-10 Codes"
+    medicalRecordCount: number       // → "Medical Records"
+    billingProviderCount: number     // → "Billing Providers"
   }
 
   pharmacySummary?: {
-    totalNdcRecords: number
-    uniqueNdcCodeCount: number
-    uniqueLabelNameCount: number
+    ndcCodeCount: number             // → "NDC Codes"
+    medicationCount: number          // → "Medications"
+    pharmacyRecordCount: number      // → "Pharmacy Records"
+    prescribingProviderCount: number // → "Prescribing Providers"
   }
-  
-  
 }
 
 type Props = {
@@ -870,33 +887,57 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
   const tabData = [result.claimsData, result.claimsAnalysis, result.mcidClaims]
   const jsonString = JSON.stringify(tabData[selectedTab], null, 2)
 
+  // // const medicalSummary = [
+  // //   { label: "Diagnosis Codes", value: result.icd10Data.length },
+  // //   { label: "Unique Service Codes", value: result.serviceCodeData.length },
+  // //   { label: "Health Service Records", value: 25 },
+  // //   { label: "Providers", value: 5 },
+  // // ]
+
+  // // const pharmacySummary = [
+  // //   { label: "NDC Codes", value: 9 },
+  // //   { label: "Medications", value: 9 },
+  // //   { label: "Pharmacy Records", value: 33 },
+  // //   // { label: "Prescribing Providers", value: 5 },
+  // // ]
   // const medicalSummary = [
-  //   { label: "Diagnosis Codes", value: result.icd10Data.length },
-  //   { label: "Unique Service Codes", value: result.serviceCodeData.length },
-  //   { label: "Health Service Records", value: 25 },
-  //   { label: "Providers", value: 5 },
+  //   { label: "Service Codes", value: result.extractionSummary?.totalHealthServiceRecords || 0 },
+  //   { label: "ICD-10 Codes", value: result.extractionSummary?.totalDiagnosisCodes || 0 },
+  //   { label: "Medical Records", value: result.extractionSummary?.uniqueServiceCodeCount || 0 },
+  //   { label: "Billing Providers", value: result.extractionSummary?.uniqueDiagnosisCodeCount || 0 },
   // ]
+
+  const medicalSummary = [
+    {
+      label: "Service Codes",
+      value: result.extractionSummary?.serviceCodeCount || 0,
+    },
+    {
+      label: "ICD-10 Codes",
+      value: result.extractionSummary?.ICD10CodeCount || 0,
+    },
+    {
+      label: "Medical Records",
+      value: result.extractionSummary?.medicalRecordCount || 0,
+    },
+    {
+      label: "Billing Providers",
+      value: result.extractionSummary?.billingProviderCount || 0,
+    },
+  ];
 
   // const pharmacySummary = [
-  //   { label: "NDC Codes", value: 9 },
-  //   { label: "Medications", value: 9 },
-  //   { label: "Pharmacy Records", value: 33 },
-  //   // { label: "Prescribing Providers", value: 5 },
+  //   { label: "NDC Codes", value: result.pharmacySummary?.totalNdcRecords || 0 },
+  //   { label: "Medications", value: result.pharmacySummary?.uniqueNdcCodeCount || 0 },
+  //   { label: "Pharmacy Records", value: result.pharmacySummary?.uniqueLabelNameCount || 0 },
+  //   { label: "Prescribing Providers", value: result.pharmacySummary?.uniqueLabelNameCount || 0 },
   // ]
-  const medicalSummary = [
-    { label: "Total Health Service Records", value: result.extractionSummary?.totalHealthServiceRecords || 0 },
-    { label: "Total Diagnosis Codes", value: result.extractionSummary?.totalDiagnosisCodes || 0 },
-    { label: "Unique Service Codes", value: result.extractionSummary?.uniqueServiceCodeCount || 0 },
-    { label: "Unique Diagnosis Codes", value: result.extractionSummary?.uniqueDiagnosisCodeCount || 0 },
-  ]
-
   const pharmacySummary = [
-    { label: "Total NDC Records", value: result.pharmacySummary?.totalNdcRecords || 0 },
-    { label: "Unique NDC Codes", value: result.pharmacySummary?.uniqueNdcCodeCount || 0 },
-    { label: "Unique Label Names", value: result.pharmacySummary?.uniqueLabelNameCount || 0 },
-  ]
-  
-  
+    { label: "NDC Codes", value: result.pharmacySummary?.ndcCodeCount || 0 },
+    { label: "Medications", value: result.pharmacySummary?.medicationCount || 0 },
+    { label: "Pharmacy Records", value: result.pharmacySummary?.pharmacyRecordCount || 0 },
+    { label: "Prescribing Providers", value: result.pharmacySummary?.prescribingProviderCount || 0 },
+  ];
 
   const renderSummaryCards = (summary: { label: string; value: number }[]) => {
     const bgColors = ["#e0f2fe", "#dcfce7", "#fee2e2", "#ede9fe"]
@@ -1165,7 +1206,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                           ]}
                           data={[1, 1, 2, 1, 1, 2, 1, 4, 1, 2, 2, 1, 1, 2, 2, 2, 2]}
                         /> */}
-                        <div className="mt-6">
+                        {/* <div className="mt-6">
                           <h4 className="text-lg font-semibold">Most Frequent Diagnosis Codes:</h4>
                           <ul className="list-disc list-inside space-y-1">
                             <li>
@@ -1185,7 +1226,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                               <strong>Z90.13</strong> (2x): Acquired absence of bilateral breasts and nipples
                             </li>
                           </ul>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </>
@@ -1224,7 +1265,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                           ]}
                           data={[1, 1, 2, 1, 1, 2, 1, 4, 1, 2, 2, 1, 1, 2, 2, 2, 2]}
                         /> */}
-                        <div className="mt-6">
+                        {/* <div className="mt-6">
                           <h4 className="text-lg font-semibold">Most Frequent Service Codes:</h4>
                           <ul className="list-disc list-inside space-y-1">
                             <li>
@@ -1244,7 +1285,7 @@ export const ResultsView: React.FC<Props> = ({ result, onRunAgain }) => {
                               <strong>Z90.13</strong> (2x): Acquired absence of bilateral breasts and nipples
                             </li>
                           </ul>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   </>

@@ -60,7 +60,8 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
                 labelFormatter={(label) => `Diagnosis: ${label}`}
               />
               <Legend />
-              <Bar dataKey="value" fill="#0088FE" name="Frequency" />
+              {/* <Bar dataKey="value" fill="#0088FE" name="Frequency" /> */}
+              <Bar dataKey="value" fill="#0088FE" name="Frequency" barSize={50} />
             </BarChart>
           </ResponsiveContainer>
         )
@@ -104,7 +105,8 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
               <YAxis dataKey="name" type="category" width={100} />
               <Tooltip formatter={(value) => [`${value}%`, "Risk Level"]} />
               <Legend />
-              <Bar dataKey="value" fill="#FF8042" name="Risk %" />
+              {/* <Bar dataKey="value" fill="#FF8042" name="Risk %" /> */}
+              <Bar dataKey="value" fill="#FF8042" name="Risk %" barSize={50} />
             </BarChart>
           </ResponsiveContainer>
         )
@@ -168,7 +170,8 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="value" fill="#0088FE" />
+              {/* <Bar dataKey="value" fill="#0088FE" /> */}
+              <Bar dataKey="value" fill="#0088FE" barSize={50} />
             </BarChart>
           </ResponsiveContainer>
         )
@@ -231,7 +234,8 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
-              <Bar dataKey="value" fill="#00C49F" />
+              {/* <Bar dataKey="value" fill="#00C49F" /> */}
+              <Bar dataKey="value" fill="#00C49F" barSize={50} />
             </BarChart>
           </ResponsiveContainer>
         )
@@ -252,7 +256,8 @@ export function ChartRenderer({ graphData }: ChartRendererProps) {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="value" fill="#0088FE" />
+              {/* <Bar dataKey="value" fill="#0088FE" /> */}
+              <Bar dataKey="value" fill="#0088FE" barSize={50} />
             </BarChart>
           </ResponsiveContainer>
         )

@@ -177,7 +177,7 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
                         </div>
                     </div>
 
-                    <div className="w-full p-4">
+                    {/* <div className="w-full p-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
                             <div className="flex items-center gap-2">
                                 <TrendingUp className="h-4 w-4 text-chart-1" />
@@ -188,7 +188,7 @@ export function HealthAnalyticsDashboard({ result }: HealthAnalyticsDashboardPro
                                 <span className="text-base font-semibold">HIPAA Compliant</span>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
 
                 </div>
             </div>
