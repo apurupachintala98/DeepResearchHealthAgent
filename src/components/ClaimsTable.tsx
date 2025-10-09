@@ -15,28 +15,19 @@ interface ClaimsTableProps {
     title: string;
     data: any[];
     message: string;
+    columnDefinitions: Record<string, string>;
 }
 
-const columnDefinitions: Record<string, string> = {
-    code: "Code",
-    meaning: "Medical Meaning",
-    date: "Claim Date",
-    provider: "Billing Provider",
-    zip: "Provider ZIP",
-    position: "Position",
-    source: "Source",
-    path: "Record Path",
-};
-
-const ClaimsTable: React.FC<ClaimsTableProps> = ({ title, data, message }) => {
+const ClaimsTable: React.FC<ClaimsTableProps> = ({ title, data, message, columnDefinitions }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isFullscreen, setIsFullscreen] = useState(false);
-    const [visibleColumns, setVisibleColumns] = useState(
-        Object.keys(columnDefinitions).reduce((acc, key) => {
+    const [visibleColumns, setVisibleColumns] = useState<Record<string, boolean>>(() =>
+        Object.keys(columnDefinitions).reduce((acc: Record<string, boolean>, key) => {
             acc[key] = true;
             return acc;
-        }, {} as Record<string, boolean>)
+        }, {})
     );
+
     const [showColumnMenu, setShowColumnMenu] = useState(false);
 
     const columnMenuRef = useRef<HTMLDivElement>(null);
